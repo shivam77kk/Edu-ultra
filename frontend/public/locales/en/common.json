@@ -1,0 +1,22 @@
+{
+    "common": {
+        "welcome": "Welcome to Edu-Ultra",
+        "login": "Login",
+        "register": "Register",
+        "dashboard": "Dashboard",
+        "logout": "Logout",
+        "language": "Language"
+    },
+    "nav": {
+        "home": "Home",
+        "features": "Features",
+        "pricing": "Pricing",
+        "about": "About Us",
+        "contact": "Contact"
+    },
+    "hero": {
+        "title": "Empowering Education with AI",
+        "subtitle": "Join the revolution in learning with advanced AI tools and personalized resources.",
+        "cta": "Get Started"
+    }
+}
