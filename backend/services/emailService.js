@@ -14,14 +14,20 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-// Verify transporter configuration
-transporter.verify((error, success) => {
-    if (error) {
-        console.log('Email transporter error:', error);
-    } else {
-        console.log('Email server is ready to send messages');
-    }
-});
+// Verify transporter configuration (non-blocking)
+try {
+    transporter.verify((error, success) => {
+        if (error) {
+            console.log('⚠️ Email transporter error:', error.message);
+            console.log('📧 Email features will be disabled. Configure EMAIL_USER and EMAIL_PASSWORD in .env to enable email functionality.');
+        } else {
+            console.log('✅ Email server is ready to send messages');
+        }
+    });
+} catch (error) {
+    console.log('⚠️ Email service initialization error:', error.message);
+    console.log('📧 Email features will be disabled.');
+}
 
 /**
  * Send welcome email to new user
