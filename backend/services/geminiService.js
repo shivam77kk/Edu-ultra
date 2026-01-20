@@ -216,3 +216,92 @@ export const generateStudyPlanArgs = async (subjects, examDate, availableHoursPe
         throw new Error(`Failed to generate study plan: ${error.message}`);
     }
 };
+
+/**
+ * AI Debate Coach - Provides debate practice and feedback
+ * @param {string} topic - The debate topic
+ * @param {string} position - User's position (for/against)
+ * @param {string} userArgument - User's argument (optional for initial topic analysis)
+ * @param {string} mode - Mode: 'analyze', 'counterargument', 'feedback', 'practice'
+ * @returns {Promise<Object|string>} Debate coaching response
+ */
+export const debateCoachArgs = async (topic, position, userArgument = '', mode = 'practice') => {
+    let prompt = '';
+
+    switch (mode) {
+        case 'analyze':
+            prompt = `Analyze the debate topic: "${topic}". 
+            Provide:
+            1. Key points for the "${position}" position
+            2. Common arguments used
+            3. Potential weaknesses to address
+            4. Suggested research areas
+            Return in JSON format: { "keyPoints": [], "commonArguments": [], "weaknesses": [], "researchAreas": [] }`;
+            break;
+
+        case 'counterargument':
+            prompt = `For the debate topic "${topic}", the user is arguing "${position}" with this argument:
+            "${userArgument}"
+            
+            Provide strong counterarguments that an opponent might use. Include:
+            1. Main counterarguments (3-5)
+            2. How to defend against each
+            Return in JSON format: { "counterarguments": [{ "argument": "...", "defense": "..." }] }`;
+            break;
+
+        case 'feedback':
+            prompt = `Evaluate this debate argument for the topic "${topic}" (position: ${position}):
+            "${userArgument}"
+            
+            Provide constructive feedback on:
+            1. Strength of argument (1-10)
+            2. Logic and reasoning quality
+            3. Evidence and support
+            4. Areas for improvement
+            5. Suggested improvements
+            Return in JSON format: { "score": number, "strengths": [], "weaknesses": [], "improvements": [] }`;
+            break;
+
+        case 'practice':
+        default:
+            prompt = `Act as a debate coach for the topic: "${topic}". 
+            The user is arguing for the "${position}" position.
+            ${userArgument ? `User's current argument: "${userArgument}"` : ''}
+            
+            Provide:
+            1. Opening statement suggestions
+            2. Key arguments to develop
+            3. Rebuttals to common opposing arguments
+            4. Closing statement tips
+            ${userArgument ? '5. Specific feedback on their argument' : ''}`;
+            break;
+    }
+
+    try {
+        const currentModel = await getModel();
+        const result = await retryWithBackoff(async () => {
+            return await currentModel.generateContent(prompt);
+        });
+
+        const response = result.response;
+        const text = response.text();
+
+        // Try to parse as JSON if mode expects JSON response
+        if (['analyze', 'counterargument', 'feedback'].includes(mode)) {
+            try {
+                const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
+                return JSON.parse(jsonStr);
+            } catch (parseError) {
+                // If JSON parsing fails, return text response
+                console.warn('Failed to parse JSON response, returning text');
+                return text;
+            }
+        }
+
+        return text;
+    } catch (error) {
+        console.error("Gemini AI Error in debateCoach:", error.message);
+        throw new Error(`Failed to generate debate coaching: ${error.message}`);
+    }
+};
+
