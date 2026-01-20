@@ -9,7 +9,48 @@ if (!process.env.GOOGLE_API_KEY) {
 }
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+
+// Fallback models to try in order
+const FALLBACK_MODELS = [
+    "gemini-2.0-flash-exp",
+    "gemini-2.5-flash",
+    "gemini-2.5-flash-lite",
+    "gemini-3-flash-preview"
+];
+
+// Cache the working model
+let model = null;
+
+/**
+ * Test and get a working Gemini model from the fallback list
+ * @returns {Promise<Object>} Working Gemini model instance
+ */
+async function getWorkingModel() {
+    for (const modelName of FALLBACK_MODELS) {
+        try {
+            const testModel = genAI.getGenerativeModel({ model: modelName });
+            // Test the model with a simple prompt
+            await testModel.generateContent("test");
+            console.log(`✅ Using model: ${modelName}`);
+            return testModel;
+        } catch (error) {
+            console.log(`⚠️ Model ${modelName} failed, trying next fallback...`);
+            continue;
+        }
+    }
+    throw new Error('❌ All fallback models failed');
+}
+
+/**
+ * Get or initialize the working model (with caching)
+ * @returns {Promise<Object>} Working Gemini model instance
+ */
+async function getModel() {
+    if (!model) {
+        model = await getWorkingModel();
+    }
+    return model;
+}
 
 /**
  * Retry helper function with exponential backoff
@@ -56,8 +97,9 @@ export const generateLearningPathArgs = async (topic, goals, level) => {
   Provide the response in a structured JSON format with 'modules' array, where each module has 'title', 'description', and 'estimatedTime'.`;
 
     try {
+        const currentModel = await getModel();
         const result = await retryWithBackoff(async () => {
-            return await model.generateContent(prompt);
+            return await currentModel.generateContent(prompt);
         });
 
         const response = result.response;
@@ -77,8 +119,9 @@ export const explainTopicArgs = async (topic, level) => {
     Provide a clear explanation, real-world examples, and key takeaways.`;
 
     try {
+        const currentModel = await getModel();
         const result = await retryWithBackoff(async () => {
-            return await model.generateContent(prompt);
+            return await currentModel.generateContent(prompt);
         });
 
         const response = result.response;
@@ -94,8 +137,9 @@ export const generateQuizArgs = async (topic, difficulty, count = 5) => {
     Return JSON format: { "questions": [ { "question": "...", "options": ["A", "B", "C", "D"], "correctAnswer": "..." } ] }`;
 
     try {
+        const currentModel = await getModel();
         const result = await retryWithBackoff(async () => {
-            return await model.generateContent(prompt);
+            return await currentModel.generateContent(prompt);
         });
 
         const response = result.response;
@@ -111,7 +155,8 @@ export const generateQuizArgs = async (topic, difficulty, count = 5) => {
 
 export const chatWithAIArgs = async (message, history = []) => {
     try {
-        const chat = model.startChat({
+        const currentModel = await getModel();
+        const chat = currentModel.startChat({
             history: history,
             generationConfig: {
                 maxOutputTokens: 1000,
@@ -135,8 +180,9 @@ export const generateAssignmentArgs = async (topic, level) => {
     Include a brief description, learning objectives, and estimated time for each.`;
 
     try {
+        const currentModel = await getModel();
         const result = await retryWithBackoff(async () => {
-            return await model.generateContent(prompt);
+            return await currentModel.generateContent(prompt);
         });
 
         const response = result.response;
@@ -144,5 +190,29 @@ export const generateAssignmentArgs = async (topic, level) => {
     } catch (error) {
         console.error("Gemini AI Error in generateAssignment:", error.message);
         throw new Error(`Failed to generate assignment ideas: ${error.message}`);
+    }
+};
+
+export const generateStudyPlanArgs = async (subjects, examDate, availableHoursPerDay) => {
+    const prompt = `Create a detailed daily study plan until ${examDate}. 
+    Subjects: ${subjects.join(', ')}. 
+    Available time: ${availableHoursPerDay} hours/day. 
+    Include breaks and revision slots. 
+    Return JSON format: { "plan": { "totalDays": number, "dailySchedule": [ { "day": number, "date": "YYYY-MM-DD", "subjects": [ { "subject": "...", "topic": "...", "duration": "X hours", "timeSlot": "morning/afternoon/evening" } ], "breaks": "...", "revision": "..." } ] } }`;
+
+    try {
+        const currentModel = await getModel();
+        const result = await retryWithBackoff(async () => {
+            return await currentModel.generateContent(prompt);
+        });
+
+        const response = result.response;
+        const text = response.text();
+
+        const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
+        return JSON.parse(jsonStr);
+    } catch (error) {
+        console.error("Gemini AI Error in generateStudyPlan:", error.message);
+        throw new Error(`Failed to generate study plan: ${error.message}`);
     }
 };
