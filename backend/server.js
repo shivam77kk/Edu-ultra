@@ -3,10 +3,12 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
+import { createServer } from 'http';
 import connectDB from './config/db.js';
 import passport from './config/passport.js';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import { initializeSocket } from './config/socketHandler.js';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
@@ -27,6 +29,10 @@ connectDB();
 scheduleWeeklyReminders();
 
 const app = express();
+const httpServer = createServer(app);
+
+// Initialize Socket.IO
+initializeSocket(httpServer);
 
 // Security Middleware
 app.use(helmet());
@@ -82,6 +88,8 @@ app.use('/api/notes', noteRoutes); // Added as per instruction
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+    console.log(`Socket.IO initialized and ready for connections`);
 });
+

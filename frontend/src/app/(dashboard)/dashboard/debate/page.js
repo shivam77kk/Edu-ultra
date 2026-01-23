@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { MessageCircle, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MessageCircle, Sparkles, Loader2, Send } from 'lucide-react';
+import api from '@/lib/axios';
 
 export default function DebatePage() {
     const [formData, setFormData] = useState({
@@ -28,17 +29,7 @@ export default function DebatePage() {
         };
 
         try {
-            const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:5000/api/ai/debate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(formData)
-            });
-
-            const data = await response.json();
+            const { data } = await api.post('/ai/debate', formData);
 
             if (data.success) {
                 const aiMessage = {
@@ -52,16 +43,20 @@ export default function DebatePage() {
                 setError(data.error || 'Failed to get AI response');
             }
         } catch (err) {
-            setError('An error occurred. Please try again.');
+            console.error("Debate error:", err);
+            setError(err.response?.data?.error || 'An error occurred. Please try again.');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-8 pb-8">
             {/* Header */}
-            <div>
+            <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+            >
                 <div className="flex items-center space-x-3 mb-4">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
                         <MessageCircle className="w-6 h-6 text-white" />
@@ -71,7 +66,7 @@ export default function DebatePage() {
                         <p className="text-gray-400">Practice your argumentation skills with AI-powered debate</p>
                     </div>
                 </div>
-            </div>
+            </motion.div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Debate Form */}
@@ -141,16 +136,33 @@ export default function DebatePage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                         >
-                            {loading ? 'Debating...' : 'Submit Argument'}
+                            {loading ? (
+                                <>
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                    <span>Debating...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <Send className="w-5 h-5" />
+                                    <span>Submit Argument</span>
+                                </>
+                            )}
                         </button>
 
-                        {error && (
-                            <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-sm">
-                                {error}
-                            </div>
-                        )}
+                        <AnimatePresence>
+                            {error && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: "auto" }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-sm"
+                                >
+                                    {error}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </form>
                 </motion.div>
 
@@ -162,11 +174,9 @@ export default function DebatePage() {
                     className="lg:col-span-2 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
                 >
                     <div className="flex items-center gap-3 mb-6">
-                        <img
-                            src="/api/placeholder/80/80"
-                            alt="Debate"
-                            className="w-20 h-20 rounded-xl"
-                        />
+                        <div className="w-16 h-16 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
+                            <MessageCircle className="w-8 h-8 text-white" />
+                        </div>
                         <h2 className="text-2xl font-bold text-white">Debate History</h2>
                     </div>
                     <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">

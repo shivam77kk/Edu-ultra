@@ -61,3 +61,62 @@ export const getUsers = async (req, res) => {
         res.status(400).json({ success: false, error: err.message });
     }
 };
+
+// @desc    Upload profile image
+// @route   POST /api/users/profile/image
+// @access  Private
+export const uploadProfileImage = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ success: false, error: 'No file uploaded' });
+        }
+
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ success: false, error: 'User not found' });
+        }
+
+        // Update user avatar with cloudinary URL
+        user.avatar = req.file.path;
+        user.avatarPublicId = req.file.filename;
+
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            data: {
+                avatar: user.avatar
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+};
+
+// @desc    Remove profile image
+// @route   DELETE /api/users/profile/image
+// @access  Private
+export const removeProfileImage = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ success: false, error: 'User not found' });
+        }
+
+        // Remove avatar
+        user.avatar = undefined;
+        user.avatarPublicId = undefined;
+
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Profile image removed'
+        });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+};
+

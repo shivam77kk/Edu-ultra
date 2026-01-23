@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { motion } from "framer-motion";
-import { User, Mail, Calendar, Shield, Camera, Loader2 } from "lucide-react";
+import { User, Mail, Calendar, Shield, Camera, Loader2, X } from "lucide-react";
 import api from "@/lib/axios";
 
 export default function ProfilePage() {
@@ -15,6 +15,7 @@ export default function ProfilePage() {
         bio: ""
     });
     const [loading, setLoading] = useState(false);
+    const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
         if (user) {
@@ -41,6 +42,42 @@ export default function ProfilePage() {
         }
     };
 
+    const handleImageUpload = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        setUploading(true);
+        try {
+            await api.post("/users/profile/image", formData, {
+                headers: { "Content-Type": "multipart/form-data" }
+            });
+            await checkAuth();
+            alert("Profile image updated successfully!");
+        } catch (error) {
+            alert("Failed to upload image");
+        } finally {
+            setUploading(false);
+        }
+    };
+
+    const handleImageRemove = async () => {
+        if (!confirm("Remove profile image?")) return;
+
+        setUploading(true);
+        try {
+            await api.delete("/users/profile/image");
+            await checkAuth();
+            alert("Profile image removed successfully!");
+        } catch (error) {
+            alert("Failed to remove image");
+        } finally {
+            setUploading(false);
+        }
+    };
+
     return (
         <div className="max-w-4xl mx-auto space-y-6">
             <div>
@@ -53,12 +90,35 @@ export default function ProfilePage() {
                 <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
                     {/* Avatar */}
                     <div className="relative">
-                        <div className="w-32 h-32 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white text-4xl font-bold">
-                            {user?.name?.charAt(0).toUpperCase()}
-                        </div>
-                        <button className="absolute bottom-0 right-0 w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
+                        {user?.avatar ? (
+                            <img
+                                src={user.avatar}
+                                alt={user.name}
+                                className="w-32 h-32 rounded-full object-cover"
+                            />
+                        ) : (
+                            <div className="w-32 h-32 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white text-4xl font-bold">
+                                {user?.name?.charAt(0).toUpperCase()}
+                            </div>
+                        )}
+                        <label className="absolute bottom-0 right-0 w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors cursor-pointer">
                             <Camera className="w-5 h-5 text-white" />
-                        </button>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageUpload}
+                                className="hidden"
+                            />
+                        </label>
+                        {user?.avatar && (
+                            <button
+                                onClick={handleImageRemove}
+                                className="absolute top-0 right-0 w-8 h-8 bg-red-600 rounded-full flex items-center justify-center hover:bg-red-700 transition-colors"
+                                title="Remove image"
+                            >
+                                <X className="w-4 h-4 text-white" />
+                            </button>
+                        )}
                     </div>
 
                     {/* Info */}

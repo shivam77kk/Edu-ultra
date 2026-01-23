@@ -69,3 +69,56 @@ export const deleteResource = async (req, res) => {
         res.status(500).json({ success: false, error: err.message });
     }
 };
+
+// @desc    Get single resource by ID
+// @route   GET /api/resources/:id
+// @access  Private
+export const getResourceById = async (req, res) => {
+    try {
+        const resource = await Resource.findById(req.params.id);
+
+        if (!resource) {
+            return res.status(404).json({ success: false, error: 'Resource not found' });
+        }
+
+        // Make sure user owns resource
+        if (resource.uploadedBy.toString() !== req.user.id) {
+            return res.status(401).json({ success: false, error: 'Not authorized' });
+        }
+
+        res.status(200).json({ success: true, data: resource });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+};
+
+// @desc    Update resource metadata
+// @route   PUT /api/resources/:id
+// @access  Private
+export const updateResource = async (req, res) => {
+    try {
+        const resource = await Resource.findById(req.params.id);
+
+        if (!resource) {
+            return res.status(404).json({ success: false, error: 'Resource not found' });
+        }
+
+        // Make sure user owns resource
+        if (resource.uploadedBy.toString() !== req.user.id) {
+            return res.status(401).json({ success: false, error: 'Not authorized' });
+        }
+
+        const { title, description, tags } = req.body;
+
+        resource.title = title || resource.title;
+        resource.description = description || resource.description;
+        resource.tags = tags ? tags.split(',').map(tag => tag.trim()) : resource.tags;
+
+        await resource.save();
+
+        res.status(200).json({ success: true, data: resource });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+};
+

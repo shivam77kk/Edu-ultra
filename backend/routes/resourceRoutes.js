@@ -1,5 +1,5 @@
 import express from 'express';
-import { uploadResource, getResources, deleteResource } from '../controllers/resourceController.js';
+import { uploadResource, getResources, deleteResource, getResourceById, updateResource } from '../controllers/resourceController.js';
 import { protect } from '../middleware/auth.js';
 import { upload } from '../config/cloudinary.js';
 
@@ -9,6 +9,8 @@ router.use(protect);
 
 router.post('/upload', upload.single('file'), uploadResource);
 router.get('/', getResources);
+router.get('/:id', getResourceById);
+router.put('/:id', updateResource);
 router.delete('/:id', deleteResource);
 
 export default router;

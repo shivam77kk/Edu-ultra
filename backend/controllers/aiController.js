@@ -75,30 +75,30 @@ export const explainTopic = async (req, res) => {
 // @route   POST /api/ai/quiz
 // @access  Private
 export const generateQuiz = async (req, res) => {
-    const { topic, difficulty = 'Medium' } = req.body;
+    const { topic, difficulty = 'Medium', numQuestions = 5 } = req.body;
 
     try {
         // Check cache first
-        const cacheKey = { topic, difficulty };
+        const cacheKey = { topic, difficulty, numQuestions };
         const cached = cache.get('quiz', cacheKey);
 
         if (cached) {
             return res.status(200).json({
                 success: true,
-                data: cached,
+                quiz: cached,
                 cached: true
             });
         }
 
         // Generate new quiz
-        const quiz = await geminiService.generateQuizArgs(topic, difficulty);
+        const quiz = await geminiService.generateQuizArgs(topic, difficulty, numQuestions);
 
         // Cache the response
         cache.set('quiz', cacheKey, quiz);
 
         res.status(200).json({
             success: true,
-            data: quiz,
+            quiz: quiz,
             cached: false
         });
     } catch (err) {
@@ -174,25 +174,24 @@ export const debateWithAI = async (req, res) => {
 // @route   POST /api/ai/study-plan
 // @access  Private
 export const generateStudyPlan = async (req, res) => {
-    const { subjects, examDate, availableHoursPerDay } = req.body;
+    const { topic, duration } = req.body;
 
     try {
         // Check cache first
-        const cacheKey = { subjects, examDate, availableHoursPerDay };
+        const cacheKey = { topic, duration };
         const cached = cache.get('study-plan', cacheKey);
 
         if (cached) {
             return res.status(200).json({
                 success: true,
-                data: cached,
+                plan: cached,
                 cached: true
             });
         }
 
-        const prompt = `Create a detailed daily study plan until ${examDate}. 
-        Subjects: ${subjects.join(', ')}. 
-        Available time: ${availableHoursPerDay} hours/day. 
-        Include breaks and revision slots. Output as JSON with 'days' array.`;
+        const prompt = `Create a detailed study plan for "${topic}" over ${duration}. 
+        Include daily breakdown with topics to cover, time allocation, practice exercises, and revision sessions.
+        Make it comprehensive and actionable.`;
 
         // Generate new plan
         const plan = await geminiService.chatWithAIArgs(prompt);
@@ -202,7 +201,7 @@ export const generateStudyPlan = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            data: plan,
+            plan: plan,
             cached: false
         });
     } catch (err) {

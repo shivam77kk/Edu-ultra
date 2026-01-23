@@ -59,11 +59,11 @@ export default function AIChatPage() {
                                 }`}>
                                 {msg.role === "user" ? <User className="w-4 h-4 text-white" /> : <Bot className="w-4 h-4 text-white" />}
                             </div>
-                            <div className={`flex-1 p-4 rounded-2xl ${msg.role === "user"
+                            <div className={`flex-1 max-w-[85%] p-4 rounded-2xl break-words ${msg.role === "user"
                                 ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
                                 : "bg-white/5 text-gray-200"
                                 }`}>
-                                <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                                <p className="text-sm leading-relaxed whitespace-pre-wrap break-words overflow-wrap-anywhere">{msg.content}</p>
                             </div>
                         </motion.div>
                     ))}
