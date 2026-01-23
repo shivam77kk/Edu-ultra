@@ -37,13 +37,15 @@ initializeSocket(httpServer);
 // Security Middleware
 app.use(helmet());
 
+/*
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // Limit each IP to 100 requests per windowMs
+    windowMs: 15 * 60 * 1000,
+    max: 100,
     standardHeaders: true,
     legacyHeaders: false,
 });
 app.use(limiter);
+*/
 
 // Middleware
 app.use(express.json());
@@ -81,7 +83,7 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/wellness', wellnessRoutes);
 app.use('/api/news', newsRoutes);
 app.use('/api/resources', resourceRoutes);
-app.use('/api/assessment', assessmentRoutes); // Added as per instruction
+app.use('/api/assessments', assessmentRoutes); // Fixed route to match frontend
 app.use('/api/collaboration', collaborationRoutes); // Added as per instruction
 app.use('/api/admin', adminRoutes); // Added as per instruction
 app.use('/api/notes', noteRoutes); // Added as per instruction

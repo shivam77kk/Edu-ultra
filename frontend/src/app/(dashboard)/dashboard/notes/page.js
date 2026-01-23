@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Plus, Edit, Trash2, FileText, Sparkles, Loader2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Plus, Edit, Trash2, FileText, Sparkles, Loader2, X } from "lucide-react";
 import api from "@/lib/axios";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export default function NotesPage() {
     const [notes, setNotes] = useState([]);
@@ -11,6 +13,8 @@ export default function NotesPage() {
     const [showModal, setShowModal] = useState(false);
     const [currentNote, setCurrentNote] = useState({ title: "", content: "" });
     const [summarizing, setSummarizing] = useState(null);
+    const [noteSummaries, setNoteSummaries] = useState({});
+    const [expandedSummaries, setExpandedSummaries] = useState({});
 
     useEffect(() => {
         fetchNotes();
@@ -57,13 +61,19 @@ export default function NotesPage() {
         setSummarizing(id);
         try {
             const { data } = await api.post(`/notes/${id}/summarize`);
-            alert(`Summary:\n\n${data.summary}`);
+            setNoteSummaries(prev => ({ ...prev, [id]: data.summary }));
+            setExpandedSummaries(prev => ({ ...prev, [id]: true }));
         } catch (error) {
             console.error("Failed to summarize:", error);
-            alert("Failed to generate summary");
+            setNoteSummaries(prev => ({ ...prev, [id]: "Failed to generate summary. Please try again." }));
+            setExpandedSummaries(prev => ({ ...prev, [id]: true }));
         } finally {
             setSummarizing(null);
         }
+    };
+
+    const toggleSummary = (id) => {
+        setExpandedSummaries(prev => ({ ...prev, [id]: !prev[id] }));
     };
 
     return (
@@ -108,6 +118,46 @@ export default function NotesPage() {
                         >
                             <h3 className="text-xl font-bold text-white mb-3 truncate">{note.title}</h3>
                             <p className="text-gray-400 text-sm mb-4 line-clamp-3">{note.content}</p>
+
+                            {/* AI Summary Section */}
+                            <AnimatePresence>
+                                {noteSummaries[note._id] && expandedSummaries[note._id] && (
+                                    <motion.div
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: "auto" }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="mb-4 overflow-hidden"
+                                    >
+                                        <div className="bg-gradient-to-r from-purple-600/10 to-pink-600/10 border border-purple-500/30 rounded-xl p-4">
+                                            <div className="flex items-center justify-between mb-2">
+                                                <div className="flex items-center space-x-2">
+                                                    <Sparkles className="w-4 h-4 text-purple-400" />
+                                                    <span className="text-sm font-semibold text-purple-400">AI Summary</span>
+                                                </div>
+                                                <button
+                                                    onClick={() => {
+                                                        const newContent = note.content + "\n\n**Summary:**\n" + noteSummaries[note._id];
+                                                        setCurrentNote({ ...note, content: newContent });
+                                                        // trigger save immediately or via modal
+                                                        // For now, let's open modal with updated content so user can review/save
+                                                        setShowModal(true);
+                                                    }}
+                                                    className="text-xs text-blue-400 hover:text-blue-300 underline"
+                                                >
+                                                    Add to Note
+                                                </button>
+                                            </div>
+                                            <div className="prose prose-invert prose-sm max-w-none">
+                                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                                    {noteSummaries[note._id]}
+                                                </ReactMarkdown>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+
                             <div className="flex items-center space-x-2">
                                 <button
                                     onClick={() => {
@@ -119,18 +169,30 @@ export default function NotesPage() {
                                     <Edit className="w-4 h-4" />
                                     <span className="text-sm">Edit</span>
                                 </button>
-                                <button
-                                    onClick={() => summarizeNote(note._id)}
-                                    disabled={summarizing === note._id}
-                                    className="flex-1 px-3 py-2 bg-purple-600/20 text-purple-400 rounded-lg hover:bg-purple-600/30 flex items-center justify-center space-x-1 disabled:opacity-50"
-                                >
-                                    {summarizing === note._id ? (
-                                        <Loader2 className="w-4 h-4 animate-spin" />
-                                    ) : (
+
+                                {noteSummaries[note._id] ? (
+                                    <button
+                                        onClick={() => toggleSummary(note._id)}
+                                        className="flex-1 px-3 py-2 bg-purple-600/20 text-purple-400 rounded-lg hover:bg-purple-600/30 flex items-center justify-center space-x-1"
+                                    >
                                         <Sparkles className="w-4 h-4" />
-                                    )}
-                                    <span className="text-sm">AI</span>
-                                </button>
+                                        <span className="text-sm">{expandedSummaries[note._id] ? 'Hide' : 'Show'}</span>
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={() => summarizeNote(note._id)}
+                                        disabled={summarizing === note._id}
+                                        className="flex-1 px-3 py-2 bg-purple-600/20 text-purple-400 rounded-lg hover:bg-purple-600/30 flex items-center justify-center space-x-1 disabled:opacity-50"
+                                    >
+                                        {summarizing === note._id ? (
+                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                        ) : (
+                                            <Sparkles className="w-4 h-4" />
+                                        )}
+                                        <span className="text-sm">AI</span>
+                                    </button>
+                                )}
+
                                 <button
                                     onClick={() => deleteNote(note._id)}
                                     className="px-3 py-2 bg-red-600/20 text-red-400 rounded-lg hover:bg-red-600/30"

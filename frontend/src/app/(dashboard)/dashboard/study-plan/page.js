@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, Sparkles } from 'lucide-react';
+import { Calendar, Sparkles, Loader2 } from 'lucide-react';
 
 export default function StudyPlanPage() {
     const [formData, setFormData] = useState({
@@ -71,7 +71,16 @@ export default function StudyPlanPage() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1 }}
-                    className="lg:col-span-1 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6 h-fit"
+                    className="lg:col-span-1 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6 h-fit z-10"
+                    style={{
+                        transformStyle: 'preserve-3d',
+                        perspective: '1000px'
+                    }}
+                    whileHover={{
+                        rotateY: 2,
+                        scale: 1.01,
+                        transition: { duration: 0.3 }
+                    }}
                 >
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div>
@@ -97,7 +106,7 @@ export default function StudyPlanPage() {
                                 type="date"
                                 value={formData.examDate}
                                 onChange={(e) => setFormData({ ...formData, examDate: e.target.value })}
-                                className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all [color-scheme:dark]"
                                 required
                             />
                         </div>
@@ -123,17 +132,17 @@ export default function StudyPlanPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden"
                         >
-                            {loading ? (
-                                <span className="flex items-center justify-center">
-                                    <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                                    </svg>
-                                    Generating...
-                                </span>
-                            ) : 'Generate Study Plan'}
+                            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                            <span className="relative flex items-center justify-center">
+                                {loading ? (
+                                    <>
+                                        <Loader2 className="animate-spin h-5 w-5 mr-3" />
+                                        Generating...
+                                    </>
+                                ) : 'Generate Study Plan'}
+                            </span>
                         </button>
 
                         {error && (

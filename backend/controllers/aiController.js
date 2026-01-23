@@ -189,9 +189,33 @@ export const generateStudyPlan = async (req, res) => {
             });
         }
 
-        const prompt = `Create a detailed study plan for "${topic}" over ${duration}. 
-        Include daily breakdown with topics to cover, time allocation, practice exercises, and revision sessions.
-        Make it comprehensive and actionable.`;
+        const prompt = `Create a comprehensive and intensive study plan for "${topic}" over ${duration}. 
+
+        The plan should be extremely detailed and include:
+        
+        ## Daily Breakdown
+        - Specific topics to cover each day
+        - Exact time allocation for each topic (in hours/minutes)
+        - Learning objectives for each session
+        - Recommended resources (books, videos, articles)
+        
+        ## Practice & Application
+        - Hands-on exercises and projects for each day
+        - Practice problems with difficulty levels
+        - Real-world application examples
+        
+        ## Review & Reinforcement
+        - Daily review sessions
+        - Weekly comprehensive reviews
+        - Self-assessment checkpoints
+        
+        ## Additional Elements
+        - Break times and rest periods
+        - Tips for effective learning
+        - Common pitfalls to avoid
+        - Milestone achievements
+        
+        Make this an intensive, actionable plan that covers the topic thoroughly. Format using markdown with clear headings, bullet points, and emphasis where appropriate.`;
 
         // Generate new plan
         const plan = await geminiService.chatWithAIArgs(prompt);

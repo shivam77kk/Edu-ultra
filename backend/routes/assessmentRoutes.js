@@ -1,11 +1,12 @@
 import express from 'express';
-import { createQuiz, submitQuiz, getResults } from '../controllers/assessmentController.js';
+import { createQuiz, submitQuiz, getResults, getAllAssessments } from '../controllers/assessmentController.js';
 import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
 router.use(protect);
 
+router.get('/', getAllAssessments);
 router.post('/create', createQuiz);
 router.post('/submit', submitQuiz);
 router.get('/results', getResults);

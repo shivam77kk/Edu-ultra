@@ -2,6 +2,31 @@ import Quiz from '../models/Quiz.js';
 import Result from '../models/Result.js';
 import * as geminiService from '../services/geminiService.js';
 
+// @desc    Get all assessments/quizzes
+// @route   GET /api/assessments
+// @access  Private
+export const getAllAssessments = async (req, res) => {
+    try {
+        const quizzes = await Quiz.find()
+            .select('title topic difficulty questions createdAt')
+            .sort({ createdAt: -1 });
+
+        // Transform to include metadata
+        const assessments = quizzes.map(quiz => ({
+            _id: quiz._id,
+            title: quiz.title,
+            description: `${quiz.difficulty} level quiz on ${quiz.topic}`,
+            questions: quiz.questions,
+            duration: quiz.questions.length * 2, // 2 minutes per question
+            createdAt: quiz.createdAt
+        }));
+
+        res.status(200).json({ success: true, data: assessments });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+};
+
 // @desc    Create a new AI Quiz and save to DB
 // @route   POST /api/assessment/create
 // @access  Private

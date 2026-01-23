@@ -116,11 +116,11 @@ export default function QuizGeneratorPage() {
                             <select
                                 value={difficulty}
                                 onChange={(e) => setDifficulty(e.target.value)}
-                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all [&>option]:text-gray-900 [&>option]:bg-white"
                             >
-                                <option value="Easy">Easy</option>
-                                <option value="Medium">Medium</option>
-                                <option value="Hard">Hard</option>
+                                <option value="Easy" className="text-gray-900 bg-white">Easy</option>
+                                <option value="Medium" className="text-gray-900 bg-white">Medium</option>
+                                <option value="Hard" className="text-gray-900 bg-white">Hard</option>
                             </select>
                         </div>
                     </div>
@@ -193,8 +193,8 @@ export default function QuizGeneratorPage() {
                                         <label
                                             key={optIndex}
                                             className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer transition-all ${answers[index] === option
-                                                    ? "bg-purple-600/30 border-2 border-purple-500"
-                                                    : "bg-white/5 border-2 border-transparent hover:bg-white/10"
+                                                ? "bg-purple-600/30 border-2 border-purple-500"
+                                                : "bg-white/5 border-2 border-transparent hover:bg-white/10"
                                                 } ${showResults && option === question.correctAnswer
                                                     ? "bg-green-600/30 border-green-500"
                                                     : showResults && answers[index] === option && option !== question.correctAnswer
@@ -244,6 +244,65 @@ export default function QuizGeneratorPage() {
                                     <p className={`${getScoreColor()} mt-2 text-xl font-semibold`}>
                                         {((calculateScore() / quiz.questions.length) * 100).toFixed(0)}% Correct
                                     </p>
+                                </div>
+
+                                {/* Results Review Section */}
+                                <div className="space-y-4">
+                                    <h3 className="text-xl font-bold text-white mb-4">📚 Review Your Answers</h3>
+                                    {quiz.questions.map((question, index) => (
+                                        <motion.div
+                                            key={`review-${index}`}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: index * 0.1 }}
+                                            className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
+                                        >
+                                            <div className="flex items-start space-x-3 mb-4">
+                                                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold flex-shrink-0">
+                                                    {index + 1}
+                                                </div>
+                                                <div className="flex-1">
+                                                    <h4 className="text-white font-semibold text-lg mb-3">{question.question}</h4>
+
+                                                    {/* Answer Status */}
+                                                    <div className="mb-4">
+                                                        {answers[index] === question.correctAnswer ? (
+                                                            <div className="flex items-center space-x-2 text-green-400">
+                                                                <CheckCircle className="w-5 h-5" />
+                                                                <span className="font-semibold">Correct!</span>
+                                                            </div>
+                                                        ) : (
+                                                            <div className="space-y-2">
+                                                                <div className="flex items-center space-x-2 text-red-400">
+                                                                    <XCircle className="w-5 h-5" />
+                                                                    <span className="font-semibold">Incorrect</span>
+                                                                </div>
+                                                                {answers[index] && (
+                                                                    <p className="text-gray-400 text-sm ml-7">
+                                                                        Your answer: <span className="text-red-400 font-medium">{answers[index]}</span>
+                                                                    </p>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    {/* Correct Answer */}
+                                                    <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 mb-3">
+                                                        <p className="text-green-400 font-semibold mb-1">✓ Correct Answer:</p>
+                                                        <p className="text-white">{question.correctAnswer}</p>
+                                                    </div>
+
+                                                    {/* Explanation */}
+                                                    {question.explanation && (
+                                                        <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
+                                                            <p className="text-blue-400 font-semibold mb-1">💡 Explanation:</p>
+                                                            <p className="text-gray-300 text-sm leading-relaxed">{question.explanation}</p>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    ))}
                                 </div>
                                 <button
                                     onClick={resetQuiz}

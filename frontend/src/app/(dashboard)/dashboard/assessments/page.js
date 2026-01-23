@@ -10,6 +10,13 @@ export default function AssessmentsPage() {
     const [assessments, setAssessments] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    // Quiz Taking State
+    const [activeQuiz, setActiveQuiz] = useState(null);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [userAnswers, setUserAnswers] = useState([]);
+    const [quizResult, setQuizResult] = useState(null);
+    const [submitting, setSubmitting] = useState(false);
+
     // Assignment Generator State
     const [assignmentForm, setAssignmentForm] = useState({
         topic: '',
@@ -67,6 +74,54 @@ export default function AssessmentsPage() {
         setTimeout(() => setCopied(false), 2000);
     };
 
+    const startQuiz = (assessment) => {
+        setActiveQuiz(assessment);
+        setCurrentQuestionIndex(0);
+        setUserAnswers(new Array(assessment.questions.length).fill(null));
+        setQuizResult(null);
+    };
+
+    const selectAnswer = (answer) => {
+        const newAnswers = [...userAnswers];
+        newAnswers[currentQuestionIndex] = answer;
+        setUserAnswers(newAnswers);
+    };
+
+    const nextQuestion = () => {
+        if (currentQuestionIndex < activeQuiz.questions.length - 1) {
+            setCurrentQuestionIndex(currentQuestionIndex + 1);
+        }
+    };
+
+    const previousQuestion = () => {
+        if (currentQuestionIndex > 0) {
+            setCurrentQuestionIndex(currentQuestionIndex - 1);
+        }
+    };
+
+    const submitQuiz = async () => {
+        setSubmitting(true);
+        try {
+            const { data } = await api.post("/assessments/submit", {
+                quizId: activeQuiz._id,
+                answers: userAnswers
+            });
+            setQuizResult(data.data);
+        } catch (error) {
+            console.error("Failed to submit quiz:", error);
+            alert("Failed to submit quiz. Please try again.");
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    const closeQuiz = () => {
+        setActiveQuiz(null);
+        setCurrentQuestionIndex(0);
+        setUserAnswers([]);
+        setQuizResult(null);
+    };
+
     return (
         <div className="space-y-6 pb-8">
             {/* Header */}
@@ -88,8 +143,8 @@ export default function AssessmentsPage() {
                 <button
                     onClick={() => setActiveTab("assessments")}
                     className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-all ${activeTab === "assessments"
-                            ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg"
-                            : "text-gray-400 hover:text-white hover:bg-white/5"
+                        ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg"
+                        : "text-gray-400 hover:text-white hover:bg-white/5"
                         }`}
                 >
                     <div className="flex items-center justify-center space-x-2">
@@ -100,8 +155,8 @@ export default function AssessmentsPage() {
                 <button
                     onClick={() => setActiveTab("assignments")}
                     className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-all ${activeTab === "assignments"
-                            ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
-                            : "text-gray-400 hover:text-white hover:bg-white/5"
+                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
+                        : "text-gray-400 hover:text-white hover:bg-white/5"
                         }`}
                 >
                     <div className="flex items-center justify-center space-x-2">
@@ -149,7 +204,10 @@ export default function AssessmentsPage() {
                                             <span>{assessment.questions?.length || 0} questions</span>
                                             <span>{assessment.duration || 30} min</span>
                                         </div>
-                                        <button className="w-full px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 flex items-center justify-center space-x-2 transition-all transform hover:scale-[1.02]">
+                                        <button
+                                            onClick={() => startQuiz(assessment)}
+                                            className="w-full px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 flex items-center justify-center space-x-2 transition-all transform hover:scale-[1.02]"
+                                        >
                                             <Play className="w-4 h-4" />
                                             <span>Start Quiz</span>
                                         </button>
@@ -282,6 +340,117 @@ export default function AssessmentsPage() {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* Quiz Modal */}
+            {activeQuiz && (
+                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="bg-gray-900 border border-white/10 rounded-2xl p-6 w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+                        {!quizResult ? (
+                            <>
+                                {/* Quiz Header */}
+                                <div className="flex items-center justify-between mb-6">
+                                    <div>
+                                        <h2 className="text-2xl font-bold text-white">{activeQuiz.title}</h2>
+                                        <p className="text-gray-400 text-sm">Question {currentQuestionIndex + 1} of {activeQuiz.questions.length}</p>
+                                    </div>
+                                </div>
+
+                                {/* Progress Bar */}
+                                <div className="w-full bg-white/10 rounded-full h-2 mb-6">
+                                    <div
+                                        className="bg-gradient-to-r from-green-600 to-emerald-600 h-2 rounded-full transition-all"
+                                        style={{ width: `${((currentQuestionIndex + 1) / activeQuiz.questions.length) * 100}%` }}
+                                    />
+                                </div>
+
+                                {/* Question */}
+                                <div className="mb-6">
+                                    <h3 className="text-xl font-semibold text-white mb-4">
+                                        {activeQuiz.questions[currentQuestionIndex].question}
+                                    </h3>
+                                    <div className="space-y-3">
+                                        {activeQuiz.questions[currentQuestionIndex].options.map((option, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={() => selectAnswer(option)}
+                                                className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${userAnswers[currentQuestionIndex] === option
+                                                        ? 'bg-green-600/20 border-green-500 text-white'
+                                                        : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10 hover:border-white/20'
+                                                    }`}
+                                            >
+                                                {option}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Navigation */}
+                                <div className="flex items-center justify-between">
+                                    <button
+                                        onClick={previousQuestion}
+                                        disabled={currentQuestionIndex === 0}
+                                        className="px-6 py-3 bg-white/5 text-white rounded-xl hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                                    >
+                                        Previous
+                                    </button>
+                                    {currentQuestionIndex === activeQuiz.questions.length - 1 ? (
+                                        <button
+                                            onClick={submitQuiz}
+                                            disabled={submitting || userAnswers.some(a => a === null)}
+                                            className="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:from-green-700 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 transition-all"
+                                        >
+                                            {submitting ? (
+                                                <>
+                                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                                    <span>Submitting...</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Award className="w-5 h-5" />
+                                                    <span>Submit Quiz</span>
+                                                </>
+                                            )}
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={nextQuestion}
+                                            className="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all"
+                                        >
+                                            Next
+                                        </button>
+                                    )}
+                                </div>
+                            </>
+                        ) : (
+                            /* Results Screen */
+                            <div className="text-center">
+                                <div className="w-24 h-24 rounded-full bg-gradient-to-r from-green-600 to-emerald-600 flex items-center justify-center mx-auto mb-6">
+                                    <Award className="w-12 h-12 text-white" />
+                                </div>
+                                <h2 className="text-3xl font-bold text-white mb-2">Quiz Complete!</h2>
+                                <p className="text-gray-400 mb-6">Here are your results</p>
+                                <div className="bg-white/5 rounded-xl p-6 mb-6">
+                                    <div className="text-6xl font-bold text-white mb-2">
+                                        {Math.round((quizResult.score / quizResult.totalQuestions) * 100)}%
+                                    </div>
+                                    <p className="text-gray-400">
+                                        {quizResult.score} out of {quizResult.totalQuestions} correct
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={closeQuiz}
+                                    className="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        )}
+                    </motion.div>
+                </div>
+            )}
         </div>
     );
 }

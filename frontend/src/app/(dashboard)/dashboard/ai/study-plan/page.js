@@ -4,6 +4,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, Sparkles, Loader2, Copy, Check, Download } from "lucide-react";
 import api from "@/lib/axios";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export default function StudyPlanPage() {
     const [topic, setTopic] = useState("");
@@ -85,12 +87,12 @@ export default function StudyPlanPage() {
                         <select
                             value={duration}
                             onChange={(e) => setDuration(e.target.value)}
-                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all [&>option]:text-gray-900 [&>option]:bg-white"
                         >
-                            <option value="1 week">1 Week</option>
-                            <option value="2 weeks">2 Weeks</option>
-                            <option value="1 month">1 Month</option>
-                            <option value="3 months">3 Months</option>
+                            <option value="1 week" className="text-gray-900 bg-white">1 Week</option>
+                            <option value="2 weeks" className="text-gray-900 bg-white">2 Weeks</option>
+                            <option value="1 month" className="text-gray-900 bg-white">1 Month</option>
+                            <option value="3 months" className="text-gray-900 bg-white">3 Months</option>
                         </select>
                     </div>
                     <button
@@ -173,8 +175,10 @@ export default function StudyPlanPage() {
                             </div>
                         </div>
                         <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                            <div className="text-gray-300 whitespace-pre-wrap leading-relaxed font-mono text-sm">
-                                {studyPlan}
+                            <div className="prose prose-invert prose-sm max-w-none">
+                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                    {studyPlan}
+                                </ReactMarkdown>
                             </div>
                         </div>
                     </motion.div>

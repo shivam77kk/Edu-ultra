@@ -18,7 +18,27 @@ const teamSchema = new mongoose.Schema({
     },
     skillsRequired: [String],
     projectIdea: String,
-    hackathonName: String, // Optional, if for a specific event
+    resources: [{
+        title: String,
+        url: String,
+        type: { type: String, default: 'link' }, // link, file
+        uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        createdAt: { type: Date, default: Date.now }
+    }],
+    inviteCode: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
+    privacy: {
+        type: String,
+        enum: ['public', 'private'],
+        default: 'private'
+    },
+    polls: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Poll'
+    }],
     createdAt: {
         type: Date,
         default: Date.now

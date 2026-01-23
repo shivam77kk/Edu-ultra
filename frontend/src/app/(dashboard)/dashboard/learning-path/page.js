@@ -60,7 +60,16 @@ export default function LearningPathPage() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1 }}
-                    className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
+                    className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-8 transform-gpu"
+                    style={{
+                        transformStyle: 'preserve-3d',
+                        perspective: '1000px'
+                    }}
+                    whileHover={{
+                        rotateY: 2,
+                        scale: 1.01,
+                        transition: { duration: 0.3 }
+                    }}
                 >
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div>
@@ -98,7 +107,7 @@ export default function LearningPathPage() {
                             <select
                                 value={formData.level}
                                 onChange={(e) => setFormData({ ...formData, level: e.target.value })}
-                                className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all [&>option]:text-gray-900"
                             >
                                 <option value="Beginner">Beginner</option>
                                 <option value="Intermediate">Intermediate</option>
@@ -109,19 +118,22 @@ export default function LearningPathPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 group relative overflow-hidden"
                         >
-                            {loading ? (
-                                <>
-                                    <Loader2 className="w-5 h-5 animate-spin" />
-                                    <span>Generating...</span>
-                                </>
-                            ) : (
-                                <>
-                                    <Sparkles className="w-5 h-5" />
-                                    <span>Generate Learning Path</span>
-                                </>
-                            )}
+                            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                            <span className="relative flex items-center justify-center space-x-2">
+                                {loading ? (
+                                    <>
+                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                        <span>Generating...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Sparkles className="w-5 h-5" />
+                                        <span>Generate Learning Path</span>
+                                    </>
+                                )}
+                            </span>
                         </button>
 
                         <AnimatePresence>

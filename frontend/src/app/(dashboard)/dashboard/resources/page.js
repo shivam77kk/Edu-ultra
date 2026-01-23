@@ -78,6 +78,38 @@ export default function ResourcesPage() {
         }
     };
 
+    const handleDownload = async (resource) => {
+        try {
+            // If it's a full URL (e.g., Cloudinary), open it directly
+            if (resource.url && (resource.url.startsWith('http') || resource.url.startsWith('https'))) {
+                window.open(resource.url, '_blank');
+                return;
+            }
+
+            const response = await api.get(resource.url, {
+                responseType: 'blob'
+            });
+
+            const blob = new Blob([response.data]);
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = resource.title || 'download';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("Download failed:", error);
+            // Fallback to opening in new tab if blob fails
+            if (resource.url) {
+                window.open(resource.url, '_blank');
+            } else {
+                alert("Download failed. URL not found.");
+            }
+        }
+    };
+
     const filteredResources = resources.filter(r =>
         r.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         r.description?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -155,14 +187,13 @@ export default function ResourcesPage() {
                                     <Eye className="w-4 h-4" />
                                     <span>View</span>
                                 </button>
-                                <a
-                                    href={resource.url}
-                                    download
+                                <button
+                                    onClick={() => handleDownload(resource)}
                                     className="px-3 py-2 bg-green-600/20 text-green-400 rounded-lg hover:bg-green-600/30 flex items-center justify-center space-x-1 text-sm"
                                 >
                                     <Download className="w-4 h-4" />
                                     <span>Download</span>
-                                </a>
+                                </button>
                                 <button
                                     onClick={() => setEditModal(resource)}
                                     className="px-3 py-2 bg-purple-600/20 text-purple-400 rounded-lg hover:bg-purple-600/30 flex items-center justify-center space-x-1 text-sm"

@@ -134,7 +134,26 @@ export const explainTopicArgs = async (topic, level) => {
 
 export const generateQuizArgs = async (topic, difficulty, count = 5) => {
     const prompt = `Generate ${count} multiple-choice questions (MCQs) on "${topic}" at ${difficulty} difficulty.
-    Return JSON format: { "questions": [ { "question": "...", "options": ["A", "B", "C", "D"], "correctAnswer": "..." } ] }`;
+    For each question:
+    1. Provide the correct answer
+    2. For EACH option (A, B, C, D), provide a brief explanation of why it is correct or incorrect
+    
+    Return JSON format: 
+    { 
+      "questions": [ 
+        { 
+          "question": "...", 
+          "options": ["A", "B", "C", "D"], 
+          "correctAnswer": "...", 
+          "optionExplanations": {
+            "A": "explanation for option A",
+            "B": "explanation for option B", 
+            "C": "explanation for option C",
+            "D": "explanation for option D"
+          }
+        } 
+      ] 
+    }`;
 
     try {
         const currentModel = await getModel();
@@ -159,7 +178,7 @@ export const chatWithAIArgs = async (message, history = []) => {
         const chat = currentModel.startChat({
             history: history,
             generationConfig: {
-                maxOutputTokens: 1000,
+                maxOutputTokens: 4096,
             },
         });
 

@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Send, Bot, User, Loader2 } from "lucide-react";
 import api from "@/lib/axios";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export default function AIChatPage() {
     const [messages, setMessages] = useState([
@@ -11,6 +13,15 @@ export default function AIChatPage() {
     ]);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     const sendMessage = async (e) => {
         e.preventDefault();
@@ -59,11 +70,19 @@ export default function AIChatPage() {
                                 }`}>
                                 {msg.role === "user" ? <User className="w-4 h-4 text-white" /> : <Bot className="w-4 h-4 text-white" />}
                             </div>
-                            <div className={`flex-1 max-w-[85%] p-4 rounded-2xl break-words ${msg.role === "user"
+                            <div className={`flex-1 max-w-[85%] p-4 rounded-2xl ${msg.role === "user"
                                 ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
                                 : "bg-white/5 text-gray-200"
                                 }`}>
-                                <p className="text-sm leading-relaxed whitespace-pre-wrap break-words overflow-wrap-anywhere">{msg.content}</p>
+                                {msg.role === "assistant" ? (
+                                    <div className="prose prose-invert prose-sm max-w-none">
+                                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                            {msg.content}
+                                        </ReactMarkdown>
+                                    </div>
+                                ) : (
+                                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                                )}
                             </div>
                         </motion.div>
                     ))}
@@ -77,6 +96,7 @@ export default function AIChatPage() {
                             </div>
                         </div>
                     )}
+                    <div ref={messagesEndRef} />
                 </div>
 
                 {/* Input */}

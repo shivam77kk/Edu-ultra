@@ -4,6 +4,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Lightbulb, Sparkles, Loader2 } from "lucide-react";
 import api from "@/lib/axios";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export default function TopicExplainerPage() {
     const [topic, setTopic] = useState("");
@@ -26,7 +28,7 @@ export default function TopicExplainerPage() {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 pb-8">
             {/* Header */}
             <div>
                 <h1 className="text-3xl font-bold text-white mb-2">AI Topic Explainer</h1>
@@ -80,10 +82,10 @@ export default function TopicExplainerPage() {
                         </div>
                         <h2 className="text-2xl font-bold text-white">Explanation</h2>
                     </div>
-                    <div className="prose prose-invert max-w-none">
-                        <div className="text-gray-300 whitespace-pre-wrap leading-relaxed">
+                    <div className="prose prose-invert prose-lg max-w-none">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
                             {explanation}
-                        </div>
+                        </ReactMarkdown>
                     </div>
                 </motion.div>
             )}

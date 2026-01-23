@@ -74,7 +74,16 @@ export default function DebatePage() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1 }}
-                    className="lg:col-span-1 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6 h-fit"
+                    className="lg:col-span-1 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6 h-fit z-10"
+                    style={{
+                        transformStyle: 'preserve-3d',
+                        perspective: '1000px'
+                    }}
+                    whileHover={{
+                        rotateY: 2,
+                        scale: 1.01,
+                        transition: { duration: 0.3 }
+                    }}
                 >
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
@@ -136,19 +145,22 @@ export default function DebatePage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden"
                         >
-                            {loading ? (
-                                <>
-                                    <Loader2 className="w-5 h-5 animate-spin" />
-                                    <span>Debating...</span>
-                                </>
-                            ) : (
-                                <>
-                                    <Send className="w-5 h-5" />
-                                    <span>Submit Argument</span>
-                                </>
-                            )}
+                            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                            <span className="relative flex items-center justify-center space-x-2">
+                                {loading ? (
+                                    <>
+                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                        <span>Debating...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Send className="w-5 h-5" />
+                                        <span>Submit Argument</span>
+                                    </>
+                                )}
+                            </span>
                         </button>
 
                         <AnimatePresence>
