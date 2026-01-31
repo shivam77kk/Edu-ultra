@@ -54,7 +54,7 @@ export default function DebateCoachPage() {
 
     return (
         <div className="space-y-6 pb-8">
-            {/* Header */}
+            {}
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -63,7 +63,7 @@ export default function DebateCoachPage() {
                 <p className="text-gray-400">Practice debating and improve your argumentation skills</p>
             </motion.div>
 
-            {/* Setup Form */}
+            {}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -148,7 +148,7 @@ export default function DebateCoachPage() {
                     </div>
                 </form>
 
-                {/* Error Message */}
+                {}
                 <AnimatePresence>
                     {error && (
                         <motion.div
@@ -163,7 +163,7 @@ export default function DebateCoachPage() {
                 </AnimatePresence>
             </motion.div>
 
-            {/* Debate History */}
+            {}
             <AnimatePresence>
                 {debateHistory.length > 0 && (
                     <motion.div
@@ -215,7 +215,7 @@ export default function DebateCoachPage() {
                 )}
             </AnimatePresence>
 
-            {/* Current Response */}
+            {}
             <AnimatePresence>
                 {response && debateHistory.length === 0 && (
                     <motion.div

@@ -29,7 +29,7 @@ const resourceSchema = new mongoose.Schema({
         required: true
     },
     aiSummary: {
-        type: String // AI generated summary of the resource
+        type: String 
     },
     createdAt: {
         type: Date,

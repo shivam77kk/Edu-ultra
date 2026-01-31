@@ -80,7 +80,7 @@ export default function ResourcesPage() {
 
     const handleDownload = async (resource) => {
         try {
-            // If it's a full URL (e.g., Cloudinary), open it directly
+            
             if (resource.url && (resource.url.startsWith('http') || resource.url.startsWith('https'))) {
                 window.open(resource.url, '_blank');
                 return;
@@ -101,7 +101,7 @@ export default function ResourcesPage() {
             window.URL.revokeObjectURL(url);
         } catch (error) {
             console.error("Download failed:", error);
-            // Fallback to opening in new tab if blob fails
+            
             if (resource.url) {
                 window.open(resource.url, '_blank');
             } else {
@@ -117,7 +117,7 @@ export default function ResourcesPage() {
 
     return (
         <div className="space-y-6">
-            {/* Header */}
+            {}
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <div>
                     <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Resource Library</h1>
@@ -147,7 +147,7 @@ export default function ResourcesPage() {
                 </div>
             </div>
 
-            {/* Resources Grid */}
+            {}
             {loading || uploading ? (
                 <div className="text-center py-12">
                     <Loader2 className="w-8 h-8 text-blue-500 animate-spin mx-auto" />
@@ -214,7 +214,7 @@ export default function ResourcesPage() {
                 </div>
             )}
 
-            {/* View Modal */}
+            {}
             {viewModal && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                     <motion.div
@@ -261,7 +261,7 @@ export default function ResourcesPage() {
                 </div>
             )}
 
-            {/* Edit Modal */}
+            {}
             {editModal && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                     <motion.div
@@ -311,7 +311,7 @@ export default function ResourcesPage() {
                 </div>
             )}
 
-            {/* Delete Modal */}
+            {}
             {deleteModal && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                     <motion.div

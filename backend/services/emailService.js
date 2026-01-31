@@ -3,18 +3,18 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Create reusable transporter object using SMTP transport
+
 const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: parseInt(process.env.EMAIL_PORT || '587'),
-    secure: false, // true for 465, false for other ports
+    secure: false, 
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASSWORD,
     },
 });
 
-// Verify transporter configuration (non-blocking)
+
 try {
     transporter.verify((error, success) => {
         if (error) {
@@ -29,11 +29,7 @@ try {
     console.log('📧 Email features will be disabled.');
 }
 
-/**
- * Send welcome email to new user
- * @param {string} email - User's email address
- * @param {string} name - User's name
- */
+
 export const sendWelcomeEmail = async (email, name) => {
     const mailOptions = {
         from: process.env.EMAIL_FROM || 'Edu-Ultra <noreply@edu-ultra.com>',
@@ -167,11 +163,7 @@ Team Edu-Ultra
     }
 };
 
-/**
- * Send weekly reminder email to user
- * @param {string} email - User's email address
- * @param {string} name - User's name
- */
+
 export const sendWeeklyReminderEmail = async (email, name) => {
     const mailOptions = {
         from: process.env.EMAIL_FROM || 'Edu-Ultra <noreply@edu-ultra.com>',

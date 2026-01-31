@@ -9,7 +9,7 @@ export default function JoinTeamPage() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const inviteCode = searchParams.get("code");
-    const [status, setStatus] = useState("joining"); // joining, success, error
+    const [status, setStatus] = useState("joining"); 
 
     useEffect(() => {
         if (!inviteCode) {

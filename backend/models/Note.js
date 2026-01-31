@@ -11,7 +11,7 @@ const noteSchema = new mongoose.Schema({
         required: true
     },
     content: {
-        type: String, // Markdown supported
+        type: String, 
         required: true
     },
     subject: {
@@ -19,7 +19,7 @@ const noteSchema = new mongoose.Schema({
     },
     tags: [String],
     attachments: [{
-        type: String // URLs from Cloudinary
+        type: String 
     }],
     aiSummary: String,
     isShared: {

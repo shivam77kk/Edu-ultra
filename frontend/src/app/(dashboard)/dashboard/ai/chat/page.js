@@ -47,15 +47,15 @@ export default function AIChatPage() {
 
     return (
         <div className="h-[calc(100vh-8rem)] flex flex-col">
-            {/* Header */}
+            {}
             <div className="mb-6">
                 <h1 className="text-3xl font-bold text-white mb-2">AI Chat</h1>
                 <p className="text-gray-400">Chat with our AI assistant for instant help</p>
             </div>
 
-            {/* Chat Container */}
+            {}
             <div className="flex-1 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl flex flex-col overflow-hidden">
-                {/* Messages */}
+                {}
                 <div className="flex-1 overflow-y-auto p-6 space-y-4">
                     {messages.map((msg, index) => (
                         <motion.div
@@ -99,7 +99,7 @@ export default function AIChatPage() {
                     <div ref={messagesEndRef} />
                 </div>
 
-                {/* Input */}
+                {}
                 <form onSubmit={sendMessage} className="border-t border-white/10 p-4">
                     <div className="flex space-x-3">
                         <input

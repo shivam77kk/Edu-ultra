@@ -2,22 +2,22 @@ import Quiz from '../models/Quiz.js';
 import Result from '../models/Result.js';
 import * as geminiService from '../services/geminiService.js';
 
-// @desc    Get all assessments/quizzes
-// @route   GET /api/assessments
-// @access  Private
+
+
+
 export const getAllAssessments = async (req, res) => {
     try {
         const quizzes = await Quiz.find()
             .select('title topic difficulty questions createdAt')
             .sort({ createdAt: -1 });
 
-        // Transform to include metadata
+        
         const assessments = quizzes.map(quiz => ({
             _id: quiz._id,
             title: quiz.title,
             description: `${quiz.difficulty} level quiz on ${quiz.topic}`,
             questions: quiz.questions,
-            duration: quiz.questions.length * 2, // 2 minutes per question
+            duration: quiz.questions.length * 2, 
             createdAt: quiz.createdAt
         }));
 
@@ -27,9 +27,9 @@ export const getAllAssessments = async (req, res) => {
     }
 };
 
-// @desc    Create a new AI Quiz and save to DB
-// @route   POST /api/assessment/create
-// @access  Private
+
+
+
 export const createQuiz = async (req, res) => {
     const { topic, difficulty, count } = req.body;
     try {
@@ -49,11 +49,11 @@ export const createQuiz = async (req, res) => {
     }
 };
 
-// @desc    Submit Quiz Answers
-// @route   POST /api/assessment/submit
-// @access  Private
+
+
+
 export const submitQuiz = async (req, res) => {
-    const { quizId, answers } = req.body; // answers: [{ questionId, selectedOption }]
+    const { quizId, answers } = req.body; 
 
     try {
         const quiz = await Quiz.findById(quizId);
@@ -64,22 +64,22 @@ export const submitQuiz = async (req, res) => {
         let score = 0;
         const processedAnswers = [];
 
-        // Simple evaluation logic
-        // Assuming answers array matches structure or we map by question text/id
-        // Since questionId might be index or _id, let's assume index for simplicity in this MVP 
-        // or check if frontend sends index.
+        
+        
+        
+        
 
-        // Robust way: Loop through quiz questions
+        
         quiz.questions.forEach((q, index) => {
-            // Find user answer for this question
-            // Assuming 'answers' is an array of selected options in order OR objects
+            
+            
             const userAnswer = answers[index];
             const isCorrect = userAnswer === q.correctAnswer;
 
             if (isCorrect) score++;
 
             processedAnswers.push({
-                questionId: q._id, // if auto generated
+                questionId: q._id, 
                 selectedOption: userAnswer,
                 isCorrect
             });
@@ -99,9 +99,9 @@ export const submitQuiz = async (req, res) => {
     }
 };
 
-// @desc    Get user results
-// @route   GET /api/assessment/results
-// @access  Private
+
+
+
 export const getResults = async (req, res) => {
     try {
         const results = await Result.find({ user: req.user.id })

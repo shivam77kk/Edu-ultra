@@ -13,8 +13,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@distube/ytdl-core": "^4.16.12",
     "@google/generative-ai": "^0.24.1",
-    "axios": "^1.13.2",
+    "@langchain/community": "^1.1.9",
+    "@langchain/core": "^1.1.17",
+    "@langchain/google-genai": "^2.1.13",
+    "@langchain/langgraph": "^1.1.2",
+    "axios": "^1.13.4",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.8.0",
     "cookie-parser": "^1.4.7",
@@ -27,6 +32,8 @@
     "googleapis": "^168.0.0",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
+    "langchain": "^1.2.15",
+    "langsmith": "^0.4.11",
     "mongoose": "^9.0.1",
     "multer": "^2.0.2",
     "multer-storage-cloudinary": "^4.0.0",
@@ -35,7 +42,9 @@
     "nodemailer": "^7.0.12",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
-    "socket.io": "^4.8.3"
+    "socket.io": "^4.8.3",
+    "ytdl-core": "^4.11.5",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"

@@ -29,13 +29,13 @@ export default function TopicExplainerPage() {
 
     return (
         <div className="space-y-6 pb-8">
-            {/* Header */}
+            {}
             <div>
                 <h1 className="text-3xl font-bold text-white mb-2">AI Topic Explainer</h1>
                 <p className="text-gray-400">Get detailed explanations on any topic</p>
             </div>
 
-            {/* Form */}
+            {}
             <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
                 <form onSubmit={explainTopic} className="space-y-4">
                     <div>
@@ -69,7 +69,7 @@ export default function TopicExplainerPage() {
                 </form>
             </div>
 
-            {/* Explanation Result */}
+            {}
             {explanation && (
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

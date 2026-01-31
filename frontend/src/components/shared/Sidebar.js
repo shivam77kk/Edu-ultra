@@ -14,7 +14,8 @@ import {
     Users,
     Settings,
     LogOut,
-    Brain
+    Brain,
+    Video
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -26,6 +27,7 @@ export default function Sidebar() {
         { name: t("common.dashboard"), href: "/dashboard", icon: LayoutDashboard },
         { name: "My Courses", href: "/dashboard/courses", icon: BookOpen },
         { name: "AI Tools", href: "/dashboard/ai-tools", icon: Brain },
+        { name: "Video Summarizer", href: "/dashboard/video-summarizer", icon: Video },
         { name: "Wellness Center", href: "/dashboard/wellness", icon: Activity },
         { name: "Community", href: "/dashboard/community", icon: Users },
         { name: "News Feed", href: "/dashboard/news", icon: Newspaper },

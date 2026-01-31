@@ -22,12 +22,12 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        // Handle global errors, e.g., 401 Unauthorized
+        
         if (error.response?.status === 401) {
-            // Redirect to login or refresh token logic
+            
             if (typeof window !== 'undefined') {
-                // localStorage.removeItem('token'); // Optional: clear token on 401
-                // window.location.href = '/login'; // Optional: force redirect
+                
+                
             }
         }
         return Promise.reject(error);

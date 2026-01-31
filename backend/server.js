@@ -19,35 +19,28 @@ import assessmentRoutes from './routes/assessmentRoutes.js';
 import collaborationRoutes from './routes/collaborationRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import noteRoutes from './routes/noteRoutes.js';
+import videoAnalysisRoutes from './routes/videoAnalysisRoutes.js';
 import { scheduleWeeklyReminders } from './services/cronJobs.js';
 
 dotenv.config();
 
 connectDB();
 
-// Initialize cron jobs for scheduled tasks
+
 scheduleWeeklyReminders();
 
 const app = express();
 const httpServer = createServer(app);
 
-// Initialize Socket.IO
+
 initializeSocket(httpServer);
 
-// Security Middleware
+
 app.use(helmet());
 
-/*
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 100,
-    standardHeaders: true,
-    legacyHeaders: false,
-});
-app.use(limiter);
-*/
 
-// Middleware
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
@@ -56,37 +49,38 @@ app.use(cors({
 }));
 app.use(cookieParser());
 
-// Session Middleware (Required for Passport)
+
 app.use(session({
     secret: process.env.JWT_SECRET || 'secret',
     resave: false,
     saveUninitialized: false,
     cookie: {
         secure: process.env.NODE_ENV === 'production',
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        maxAge: 24 * 60 * 60 * 1000 
     }
 }));
 
-// Initialize Passport
+
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Basic Route
+
 app.get('/', (req, res) => {
     res.send('API is running...');
 });
 
-// Routes
+
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/wellness', wellnessRoutes);
 app.use('/api/news', newsRoutes);
 app.use('/api/resources', resourceRoutes);
-app.use('/api/assessments', assessmentRoutes); // Fixed route to match frontend
-app.use('/api/collaboration', collaborationRoutes); // Added as per instruction
-app.use('/api/admin', adminRoutes); // Added as per instruction
-app.use('/api/notes', noteRoutes); // Added as per instruction
+app.use('/api/assessments', assessmentRoutes); 
+app.use('/api/collaboration', collaborationRoutes); 
+app.use('/api/admin', adminRoutes); 
+app.use('/api/notes', noteRoutes); 
+app.use('/api/video-analysis', videoAnalysisRoutes); 
 
 const PORT = process.env.PORT || 5000;
 

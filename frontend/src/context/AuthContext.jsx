@@ -15,15 +15,15 @@ export function AuthProvider({ children }) {
         try {
             const token = localStorage.getItem("token");
             if (!token) {
-                // If no token, maybe we have a cookie? Try fetching profile anyway or stop
-                // But if backend requires Bearer and we don't have it, it might fail if cookies aren't set/working
-                // Let's try fetching, if 401 then no user
+                
+                
+                
             }
 
             const { data } = await api.get("/users/profile");
-            setUser(data.data); // Backend returns { success: true, data: user }
+            setUser(data.data); 
         } catch (error) {
-            // console.error("Auth check failed", error);
+            
             setUser(null);
         } finally {
             setLoading(false);
@@ -31,12 +31,12 @@ export function AuthProvider({ children }) {
     };
 
     useEffect(() => {
-        // Check for token in URL (Google Auth redirect)
+        
         const params = new URLSearchParams(window.location.search);
         const token = params.get("token");
         if (token) {
             localStorage.setItem("token", token);
-            window.history.replaceState({}, document.title, window.location.pathname); // Clean URL
+            window.history.replaceState({}, document.title, window.location.pathname); 
             checkAuth();
         } else {
             checkAuth();
@@ -59,7 +59,7 @@ export function AuthProvider({ children }) {
             router.push("/");
         } catch (error) {
             console.error("Logout failed", error);
-            localStorage.removeItem("token"); // Force cleanup
+            localStorage.removeItem("token"); 
             setUser(null);
             router.push("/");
         }

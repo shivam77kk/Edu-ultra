@@ -6,18 +6,18 @@ import { ClipboardCheck, Play, Award, Loader2, Sparkles, BookOpen, Copy, Check }
 import api from "@/lib/axios";
 
 export default function AssessmentsPage() {
-    const [activeTab, setActiveTab] = useState("assessments"); // "assessments" or "assignments"
+    const [activeTab, setActiveTab] = useState("assessments"); 
     const [assessments, setAssessments] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Quiz Taking State
+    
     const [activeQuiz, setActiveQuiz] = useState(null);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [userAnswers, setUserAnswers] = useState([]);
     const [quizResult, setQuizResult] = useState(null);
     const [submitting, setSubmitting] = useState(false);
 
-    // Assignment Generator State
+    
     const [assignmentForm, setAssignmentForm] = useState({
         topic: '',
         level: 'Medium'
@@ -124,7 +124,7 @@ export default function AssessmentsPage() {
 
     return (
         <div className="space-y-6 pb-8">
-            {/* Header */}
+            {}
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -133,7 +133,7 @@ export default function AssessmentsPage() {
                 <p className="text-gray-400">Test your knowledge and generate custom assignments</p>
             </motion.div>
 
-            {/* Tabs */}
+            {}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -166,7 +166,7 @@ export default function AssessmentsPage() {
                 </button>
             </motion.div>
 
-            {/* Content */}
+            {}
             <AnimatePresence mode="wait">
                 {activeTab === "assessments" ? (
                     <motion.div
@@ -225,7 +225,7 @@ export default function AssessmentsPage() {
                         transition={{ duration: 0.3 }}
                         className="grid grid-cols-1 lg:grid-cols-2 gap-6"
                     >
-                        {/* Assignment Form */}
+                        {}
                         <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
                             <div className="flex items-center space-x-3 mb-6">
                                 <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
@@ -294,7 +294,7 @@ export default function AssessmentsPage() {
                             </AnimatePresence>
                         </div>
 
-                        {/* Assignment Result */}
+                        {}
                         <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
                             {generatedAssignment ? (
                                 <AnimatePresence>
@@ -341,7 +341,7 @@ export default function AssessmentsPage() {
                 )}
             </AnimatePresence>
 
-            {/* Quiz Modal */}
+            {}
             {activeQuiz && (
                 <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                     <motion.div
@@ -350,7 +350,7 @@ export default function AssessmentsPage() {
                         className="bg-gray-900 border border-white/10 rounded-2xl p-6 w-full max-w-3xl max-h-[90vh] overflow-y-auto">
                         {!quizResult ? (
                             <>
-                                {/* Quiz Header */}
+                                {}
                                 <div className="flex items-center justify-between mb-6">
                                     <div>
                                         <h2 className="text-2xl font-bold text-white">{activeQuiz.title}</h2>
@@ -358,7 +358,7 @@ export default function AssessmentsPage() {
                                     </div>
                                 </div>
 
-                                {/* Progress Bar */}
+                                {}
                                 <div className="w-full bg-white/10 rounded-full h-2 mb-6">
                                     <div
                                         className="bg-gradient-to-r from-green-600 to-emerald-600 h-2 rounded-full transition-all"
@@ -366,7 +366,7 @@ export default function AssessmentsPage() {
                                     />
                                 </div>
 
-                                {/* Question */}
+                                {}
                                 <div className="mb-6">
                                     <h3 className="text-xl font-semibold text-white mb-4">
                                         {activeQuiz.questions[currentQuestionIndex].question}
@@ -387,7 +387,7 @@ export default function AssessmentsPage() {
                                     </div>
                                 </div>
 
-                                {/* Navigation */}
+                                {}
                                 <div className="flex items-center justify-between">
                                     <button
                                         onClick={previousQuestion}
@@ -425,7 +425,7 @@ export default function AssessmentsPage() {
                                 </div>
                             </>
                         ) : (
-                            /* Results Screen */
+                            
                             <div className="text-center">
                                 <div className="w-24 h-24 rounded-full bg-gradient-to-r from-green-600 to-emerald-600 flex items-center justify-center mx-auto mb-6">
                                     <Award className="w-12 h-12 text-white" />

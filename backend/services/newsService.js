@@ -4,7 +4,7 @@ dotenv.config();
 
 export const getEducationNewsArgs = async (query = 'education technology') => {
     try {
-        // Check for API Key
+        
         if (!process.env.NEWS_API_KEY) {
             console.warn("NEWS_API_KEY missing. Returning mock data.");
             throw new Error("Missing API Key");
@@ -27,7 +27,7 @@ export const getEducationNewsArgs = async (query = 'education technology') => {
         }
     } catch (error) {
         console.error("News API Error (using fallback):", error.message);
-        // Fallback Mock Data
+        
         return [
             {
                 title: "AI in Education: The Future is Here",

@@ -54,7 +54,7 @@ export default function StudyPlanPage() {
 
     return (
         <div className="space-y-6 pb-8">
-            {/* Header */}
+            {}
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -63,7 +63,7 @@ export default function StudyPlanPage() {
                 <p className="text-gray-400">Create personalized study plans with AI</p>
             </motion.div>
 
-            {/* Form */}
+            {}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -114,7 +114,7 @@ export default function StudyPlanPage() {
                     </button>
                 </form>
 
-                {/* Error Message */}
+                {}
                 <AnimatePresence>
                     {error && (
                         <motion.div
@@ -129,7 +129,7 @@ export default function StudyPlanPage() {
                 </AnimatePresence>
             </motion.div>
 
-            {/* Study Plan Result */}
+            {}
             <AnimatePresence>
                 {studyPlan && (
                     <motion.div

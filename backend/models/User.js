@@ -28,20 +28,20 @@ const userSchema = new mongoose.Schema({
     googleId: String,
     avatar: {
         type: String,
-        default: 'https://res.cloudinary.com/shivamtonpe/image/upload/v1/default-avatar.png' // Placeholder
+        default: 'https://res.cloudinary.com/shivamtonpe/image/upload/v1/default-avatar.png' 
     },
     educationLevel: String,
     learningGoals: [String],
     skillInterests: [String],
-    dailyStudyTimePreference: Number, // in minutes
+    dailyStudyTimePreference: Number, 
     createdAt: {
         type: Date,
         default: Date.now
     }
 });
 
-// Encrypt password using bcrypt
-// Encrypt password using bcrypt
+
+
 userSchema.pre('save', async function () {
     if (!this.isModified('password')) {
         return;
@@ -55,14 +55,14 @@ userSchema.pre('save', async function () {
     }
 });
 
-// Sign JWT and return
+
 userSchema.methods.getSignedJwtToken = function () {
     return jwt.sign({ id: this._id, role: this.role }, process.env.JWT_SECRET, {
         expiresIn: '30d'
     });
 };
 
-// Match user entered password to hashed password in database
+
 userSchema.methods.matchPassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };

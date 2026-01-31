@@ -52,7 +52,7 @@ export default function StudyPlanPage() {
 
     return (
         <div className="space-y-8">
-            {/* Header */}
+            {}
             <div>
                 <div className="flex items-center space-x-3 mb-4">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
@@ -66,7 +66,7 @@ export default function StudyPlanPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Form Section */}
+                {}
                 <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -153,7 +153,7 @@ export default function StudyPlanPage() {
                     </form>
                 </motion.div>
 
-                {/* Study Plan Display */}
+                {}
                 <motion.div
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}

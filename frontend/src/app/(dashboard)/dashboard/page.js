@@ -41,7 +41,7 @@ export default function DashboardPage() {
 
     return (
         <div className="space-y-8">
-            {/* Welcome Section */}
+            {}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -54,7 +54,7 @@ export default function DashboardPage() {
                 </div>
             </motion.div>
 
-            {/* Stats Grid */}
+            {}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
                 {stats.map((stat, index) => {
                     const Icon = stat.icon;
@@ -83,7 +83,7 @@ export default function DashboardPage() {
                 })}
             </div>
 
-            {/* Quick Actions */}
+            {}
             <div>
                 <h2 className="text-2xl font-bold text-white mb-6">Quick Actions</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -109,9 +109,9 @@ export default function DashboardPage() {
                 </div>
             </div>
 
-            {/* Recent Activity & Progress */}
+            {}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Recent Activity */}
+                {}
                 <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="text-xl font-bold text-white">Recent Activity</h3>
@@ -136,7 +136,7 @@ export default function DashboardPage() {
                     </div>
                 </div>
 
-                {/* Learning Progress */}
+                {}
                 <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="text-xl font-bold text-white">Learning Progress</h3>

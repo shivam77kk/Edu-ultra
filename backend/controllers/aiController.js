@@ -1,14 +1,14 @@
 import * as geminiService from '../services/geminiService.js';
 import cache from '../services/cacheService.js';
 
-// @desc    Generate a learning path
-// @route   POST /api/ai/learning-path
-// @access  Private
+
+
+
 export const generateLearningPath = async (req, res) => {
     const { topic, goals, level } = req.body;
 
     try {
-        // Check cache first
+        
         const cacheKey = { topic, goals, level };
         const cached = cache.get('learning-path', cacheKey);
 
@@ -20,10 +20,10 @@ export const generateLearningPath = async (req, res) => {
             });
         }
 
-        // Generate new response
+        
         const path = await geminiService.generateLearningPathArgs(topic, goals, level);
 
-        // Cache the response
+        
         cache.set('learning-path', cacheKey, path);
 
         res.status(200).json({
@@ -36,14 +36,14 @@ export const generateLearningPath = async (req, res) => {
     }
 };
 
-// @desc    Explain a topic
-// @route   POST /api/ai/explain
-// @access  Private
+
+
+
 export const explainTopic = async (req, res) => {
     const { topic, level = 'Medium' } = req.body;
 
     try {
-        // Check cache first
+        
         const cacheKey = { topic, level };
         const cached = cache.get('explain', cacheKey);
 
@@ -55,10 +55,10 @@ export const explainTopic = async (req, res) => {
             });
         }
 
-        // Generate new explanation
+        
         const explanation = await geminiService.explainTopicArgs(topic, level);
 
-        // Cache the response
+        
         cache.set('explain', cacheKey, explanation);
 
         res.status(200).json({
@@ -71,14 +71,14 @@ export const explainTopic = async (req, res) => {
     }
 };
 
-// @desc    Generate a quiz
-// @route   POST /api/ai/quiz
-// @access  Private
+
+
+
 export const generateQuiz = async (req, res) => {
     const { topic, difficulty = 'Medium', numQuestions = 5 } = req.body;
 
     try {
-        // Check cache first
+        
         const cacheKey = { topic, difficulty, numQuestions };
         const cached = cache.get('quiz', cacheKey);
 
@@ -90,10 +90,10 @@ export const generateQuiz = async (req, res) => {
             });
         }
 
-        // Generate new quiz
+        
         const quiz = await geminiService.generateQuizArgs(topic, difficulty, numQuestions);
 
-        // Cache the response
+        
         cache.set('quiz', cacheKey, quiz);
 
         res.status(200).json({
@@ -106,15 +106,15 @@ export const generateQuiz = async (req, res) => {
     }
 };
 
-// @desc    Chat with AI Study Buddy
-// @route   POST /api/ai/chat
-// @access  Private
+
+
+
 export const chatWithAI = async (req, res) => {
     const { message, history = [] } = req.body;
 
     try {
-        // Chat responses are typically unique, but we can cache simple queries
-        // Only cache if no history (first message in conversation)
+        
+        
         let cached = null;
         if (history.length === 0) {
             const cacheKey = { message };
@@ -129,10 +129,10 @@ export const chatWithAI = async (req, res) => {
             }
         }
 
-        // Generate new response
+        
         const reply = await geminiService.chatWithAIArgs(message, history);
 
-        // Cache only if first message
+        
         if (history.length === 0) {
             cache.set('chat', { message }, reply);
         }
@@ -147,9 +147,9 @@ export const chatWithAI = async (req, res) => {
     }
 };
 
-// @desc    AI Debate Mode
-// @route   POST /api/ai/debate
-// @access  Private
+
+
+
 export const debateWithAI = async (req, res) => {
     const { topic, role, argument } = req.body;
 
@@ -158,7 +158,7 @@ export const debateWithAI = async (req, res) => {
     Respond with a counter-argument, point out any logical fallacies, and score my argument strength (0-10).`;
 
     try {
-        // Debate responses are unique, don't cache
+        
         const reply = await geminiService.chatWithAIArgs(prompt);
         res.status(200).json({
             success: true,
@@ -170,14 +170,14 @@ export const debateWithAI = async (req, res) => {
     }
 };
 
-// @desc    Generate Study Plan
-// @route   POST /api/ai/study-plan
-// @access  Private
+
+
+
 export const generateStudyPlan = async (req, res) => {
     const { topic, duration } = req.body;
 
     try {
-        // Check cache first
+        
         const cacheKey = { topic, duration };
         const cached = cache.get('study-plan', cacheKey);
 
@@ -217,10 +217,10 @@ export const generateStudyPlan = async (req, res) => {
         
         Make this an intensive, actionable plan that covers the topic thoroughly. Format using markdown with clear headings, bullet points, and emphasis where appropriate.`;
 
-        // Generate new plan
+        
         const plan = await geminiService.chatWithAIArgs(prompt);
 
-        // Cache the response
+        
         cache.set('study-plan', cacheKey, plan);
 
         res.status(200).json({
@@ -233,14 +233,14 @@ export const generateStudyPlan = async (req, res) => {
     }
 };
 
-// @desc    Generate assignment ideas
-// @route   POST /api/ai/assignment
-// @access  Private
+
+
+
 export const generateAssignment = async (req, res) => {
     const { topic, level = 'Medium' } = req.body;
 
     try {
-        // Check cache first
+        
         const cacheKey = { topic, level };
         const cached = cache.get('assignment', cacheKey);
 
@@ -252,10 +252,10 @@ export const generateAssignment = async (req, res) => {
             });
         }
 
-        // Generate new ideas
+        
         const ideas = await geminiService.generateAssignmentArgs(topic, level);
 
-        // Cache the response
+        
         cache.set('assignment', cacheKey, ideas);
 
         res.status(200).json({

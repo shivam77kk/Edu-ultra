@@ -32,7 +32,7 @@ export default function RegisterPage() {
                 email: formData.email,
                 password: formData.password
             });
-            // Backend returns { success: true, token: "..." }
+            
             if (data.token) {
                 login(data.token);
             } else {

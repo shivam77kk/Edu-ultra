@@ -5,7 +5,7 @@ import { upload } from '../config/cloudinary.js';
 
 const router = express.Router();
 
-router.use(protect); // Protect all routes below
+router.use(protect); 
 
 router.route('/profile')
     .get(getUserProfile)

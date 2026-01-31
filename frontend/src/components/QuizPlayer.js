@@ -8,7 +8,7 @@ export default function QuizPlayer({ quiz, onComplete }) {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [selectedAnswers, setSelectedAnswers] = useState({});
     const [showResults, setShowResults] = useState(false);
-    const [timeLeft, setTimeLeft] = useState(quiz.duration * 60 || 1800); // in seconds
+    const [timeLeft, setTimeLeft] = useState(quiz.duration * 60 || 1800); 
     const [score, setScore] = useState(0);
 
     useEffect(() => {
@@ -131,7 +131,7 @@ export default function QuizPlayer({ quiz, onComplete }) {
 
     return (
         <div className="bg-white rounded-2xl shadow-2xl overflow-hidden max-w-4xl mx-auto">
-            {/* Header */}
+            {}
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-2xl font-bold">{quiz.title}</h2>
@@ -153,7 +153,7 @@ export default function QuizPlayer({ quiz, onComplete }) {
                 </p>
             </div>
 
-            {/* Question */}
+            {}
             <div className="p-8">
                 <AnimatePresence mode="wait">
                     <motion.div
@@ -197,7 +197,7 @@ export default function QuizPlayer({ quiz, onComplete }) {
                 </AnimatePresence>
             </div>
 
-            {/* Navigation */}
+            {}
             <div className="border-t border-gray-200 p-6 flex items-center justify-between">
                 <button
                     onClick={handlePrevious}

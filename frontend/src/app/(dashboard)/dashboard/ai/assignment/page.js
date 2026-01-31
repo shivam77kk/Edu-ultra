@@ -48,7 +48,7 @@ export default function AssignmentGeneratorPage() {
 
     return (
         <div className="space-y-6 pb-8">
-            {/* Header */}
+            {}
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -58,7 +58,7 @@ export default function AssignmentGeneratorPage() {
             </motion.div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Assignment Form */}
+                {}
                 <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -140,7 +140,7 @@ export default function AssignmentGeneratorPage() {
                     </AnimatePresence>
                 </motion.div>
 
-                {/* Assignment Result */}
+                {}
                 <motion.div
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}

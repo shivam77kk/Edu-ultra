@@ -21,7 +21,8 @@ import {
     Shield,
     Menu,
     X,
-    User
+    User,
+    Video
 } from "lucide-react";
 
 export default function DashboardLayout({ children }) {
@@ -55,6 +56,7 @@ export default function DashboardLayout({ children }) {
     const menuItems = [
         { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
         { icon: Brain, label: "AI Tools", href: "/dashboard/ai" },
+        { icon: Video, label: "Video Summarizer", href: "/dashboard/video-summarizer" },
         { icon: StickyNote, label: "Notes", href: "/dashboard/notes" },
         { icon: BookOpen, label: "Resources", href: "/dashboard/resources" },
         { icon: ClipboardCheck, label: "Assessments", href: "/dashboard/assessments" },
@@ -69,7 +71,7 @@ export default function DashboardLayout({ children }) {
 
     const Sidebar = ({ mobile = false }) => (
         <div className={`flex flex-col h-full ${mobile ? 'bg-black/95 backdrop-blur-xl' : 'bg-black/40 backdrop-blur-xl'}`}>
-            {/* Logo */}
+            {}
             <div className="h-20 flex items-center justify-between px-6 border-b border-white/10">
                 {(!sidebarCollapsed || mobile) && (
                     <Link href="/dashboard" className="flex items-center space-x-2 group" onClick={() => setMobileMenuOpen(false)}>
@@ -97,7 +99,7 @@ export default function DashboardLayout({ children }) {
                 )}
             </div>
 
-            {/* Navigation */}
+            {}
             <nav className="flex-1 overflow-y-auto py-6 px-3 space-y-1">
                 {menuItems.map((item) => {
                     const Icon = item.icon;
@@ -108,8 +110,8 @@ export default function DashboardLayout({ children }) {
                             <motion.div
                                 whileHover={{ x: 4 }}
                                 className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${isActive
-                                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-purple-500/30"
-                                        : "text-gray-400 hover:text-white hover:bg-white/5"
+                                    ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-purple-500/30"
+                                    : "text-gray-400 hover:text-white hover:bg-white/5"
                                     }`}
                             >
                                 <Icon className="w-5 h-5 flex-shrink-0" />
@@ -120,7 +122,7 @@ export default function DashboardLayout({ children }) {
                 })}
             </nav>
 
-            {/* User Profile */}
+            {}
             <div className="border-t border-white/10 p-4">
                 <Link href="/dashboard/profile" onClick={() => setMobileMenuOpen(false)}>
                     <div className={`flex items-center space-x-3 p-3 rounded-xl hover:bg-white/5 transition-colors cursor-pointer ${sidebarCollapsed && !mobile ? 'justify-center' : ''}`}>
@@ -151,14 +153,14 @@ export default function DashboardLayout({ children }) {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
-            {/* Animated Background */}
+            {}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob"></div>
                 <div className="absolute top-0 -right-4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob animation-delay-2000"></div>
                 <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob animation-delay-4000"></div>
             </div>
 
-            {/* Mobile Menu Button */}
+            {}
             <div className="lg:hidden fixed top-4 left-4 z-50">
                 <button
                     onClick={() => setMobileMenuOpen(true)}
@@ -168,7 +170,7 @@ export default function DashboardLayout({ children }) {
                 </button>
             </div>
 
-            {/* Mobile Sidebar */}
+            {}
             {mobileMenuOpen && (
                 <div className="lg:hidden fixed inset-0 z-50">
                     <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)}></div>
@@ -184,7 +186,7 @@ export default function DashboardLayout({ children }) {
             )}
 
             <div className="flex relative z-10">
-                {/* Desktop Sidebar */}
+                {}
                 <motion.aside
                     initial={false}
                     animate={{ width: sidebarCollapsed ? "80px" : "280px" }}
@@ -193,7 +195,7 @@ export default function DashboardLayout({ children }) {
                     <Sidebar />
                 </motion.aside>
 
-                {/* Main Content */}
+                {}
                 <motion.main
                     initial={false}
                     animate={{ marginLeft: sidebarCollapsed ? "80px" : "280px" }}

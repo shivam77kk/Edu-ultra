@@ -12,7 +12,7 @@ passport.use(
             callbackURL: process.env.GOOGLE_CALLBACK_URL,
         },
         async (accessToken, refreshToken, profile, done) => {
-            // console.log(profile);
+            
             const newUser = {
                 googleId: profile.id,
                 name: profile.displayName,
@@ -26,7 +26,7 @@ passport.use(
                 if (user) {
                     done(null, user);
                 } else {
-                    // Check if user exists with email but no googleId
+                    
                     user = await User.findOne({ email: profile.emails[0].value });
 
                     if (user) {

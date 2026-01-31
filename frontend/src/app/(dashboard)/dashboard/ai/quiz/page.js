@@ -69,7 +69,7 @@ export default function QuizGeneratorPage() {
 
     return (
         <div className="space-y-6 pb-8">
-            {/* Header */}
+            {}
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -78,7 +78,7 @@ export default function QuizGeneratorPage() {
                 <p className="text-gray-400">Generate custom quizzes to test your knowledge</p>
             </motion.div>
 
-            {/* Form */}
+            {}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -143,7 +143,7 @@ export default function QuizGeneratorPage() {
                     </button>
                 </form>
 
-                {/* Error Message */}
+                {}
                 <AnimatePresence>
                     {error && (
                         <motion.div
@@ -158,7 +158,7 @@ export default function QuizGeneratorPage() {
                 </AnimatePresence>
             </motion.div>
 
-            {/* Quiz */}
+            {}
             <AnimatePresence>
                 {quiz && quiz.questions && (
                     <motion.div
@@ -246,7 +246,7 @@ export default function QuizGeneratorPage() {
                                     </p>
                                 </div>
 
-                                {/* Results Review Section */}
+                                {}
                                 <div className="space-y-4">
                                     <h3 className="text-xl font-bold text-white mb-4">📚 Review Your Answers</h3>
                                     {quiz.questions.map((question, index) => (
@@ -264,7 +264,7 @@ export default function QuizGeneratorPage() {
                                                 <div className="flex-1">
                                                     <h4 className="text-white font-semibold text-lg mb-3">{question.question}</h4>
 
-                                                    {/* Answer Status */}
+                                                    {}
                                                     <div className="mb-4">
                                                         {answers[index] === question.correctAnswer ? (
                                                             <div className="flex items-center space-x-2 text-green-400">
@@ -286,13 +286,13 @@ export default function QuizGeneratorPage() {
                                                         )}
                                                     </div>
 
-                                                    {/* Correct Answer */}
+                                                    {}
                                                     <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 mb-3">
                                                         <p className="text-green-400 font-semibold mb-1">✓ Correct Answer:</p>
                                                         <p className="text-white">{question.correctAnswer}</p>
                                                     </div>
 
-                                                    {/* Explanation */}
+                                                    {}
                                                     {question.explanation && (
                                                         <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
                                                             <p className="text-blue-400 font-semibold mb-1">💡 Explanation:</p>

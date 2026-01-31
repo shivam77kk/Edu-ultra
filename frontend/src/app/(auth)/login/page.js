@@ -23,7 +23,7 @@ export default function LoginPage() {
 
         try {
             const { data } = await api.post("/auth/login", formData);
-            // Backend returns { success: true, token: "..." }
+            
             if (data.token) {
                 login(data.token);
             }

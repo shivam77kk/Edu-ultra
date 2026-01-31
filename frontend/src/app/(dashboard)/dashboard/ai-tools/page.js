@@ -34,10 +34,10 @@ export default function AIChatPage() {
 
         try {
             const { data } = await api.post("/ai/chat", { message: input });
-            // Assuming backend returns { success: true, data: "response text" } or similar
-            // Adjust based on actual backend response structure. 
-            // Based on aiController.js (standard), it likely returns data object.
-            // Let's assume data.response or data.message
+            
+            
+            
+            
             const botMessage = { role: "assistant", content: data.response || data.message || "I understood that." };
             setMessages((prev) => [...prev, botMessage]);
         } catch (error) {
@@ -51,7 +51,7 @@ export default function AIChatPage() {
 
     return (
         <div className="flex flex-col h-[calc(100vh-8rem)] bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
-            {/* Header */}
+            {}
             <div className="p-4 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 flex items-center space-x-3">
                 <div className="p-2 bg-violet-100 text-violet-600 rounded-lg">
                     <Sparkles className="w-5 h-5" />
@@ -62,7 +62,7 @@ export default function AIChatPage() {
                 </div>
             </div>
 
-            {/* Messages */}
+            {}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {messages.map((msg, idx) => (
                     <div
@@ -95,7 +95,7 @@ export default function AIChatPage() {
                 <div ref={messagesEndRef} />
             </div>
 
-            {/* Input */}
+            {}
             <div className="p-4 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-black">
                 <form onSubmit={handleSend} className="flex space-x-2">
                     <Input

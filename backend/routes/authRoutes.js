@@ -10,7 +10,7 @@ router.post('/login', login);
 router.get('/logout', logout);
 router.get('/me', protect, getMe);
 
-// Google Auth
+
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 router.get(

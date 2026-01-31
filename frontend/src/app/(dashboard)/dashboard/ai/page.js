@@ -76,7 +76,7 @@ export default function AIToolsPage() {
 
     return (
         <div className="space-y-8">
-            {/* Header */}
+            {}
             <div>
                 <div className="flex items-center space-x-3 mb-4">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
@@ -89,7 +89,7 @@ export default function AIToolsPage() {
                 </div>
             </div>
 
-            {/* AI Tools Grid */}
+            {}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {aiTools.map((tool, index) => {
                     const Icon = tool.icon;
@@ -119,7 +119,7 @@ export default function AIToolsPage() {
                 })}
             </div>
 
-            {/* Info Section */}
+            {}
             <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 rounded-2xl p-6">
                 <h3 className="text-white font-bold text-lg mb-2">💡 Pro Tip</h3>
                 <p className="text-gray-300">

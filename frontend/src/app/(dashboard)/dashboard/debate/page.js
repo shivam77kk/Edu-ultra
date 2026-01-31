@@ -20,7 +20,7 @@ export default function DebatePage() {
         setLoading(true);
         setError('');
 
-        // Add user argument to history
+        
         const userMessage = {
             type: 'user',
             content: formData.argument,
@@ -52,7 +52,7 @@ export default function DebatePage() {
 
     return (
         <div className="space-y-8 pb-8">
-            {/* Header */}
+            {}
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -69,7 +69,7 @@ export default function DebatePage() {
             </motion.div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Debate Form */}
+                {}
                 <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -178,7 +178,7 @@ export default function DebatePage() {
                     </form>
                 </motion.div>
 
-                {/* Debate History */}
+                {}
                 <motion.div
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}

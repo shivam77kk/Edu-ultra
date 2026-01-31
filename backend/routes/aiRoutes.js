@@ -13,8 +13,8 @@ import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Rate limiting disabled due to IPv6 validation issue - can be re-enabled with proper configuration
-router.use(protect); // Authentication required
+
+router.use(protect); 
 
 router.post('/learning-path', generateLearningPath);
 router.post('/explain', explainTopic);

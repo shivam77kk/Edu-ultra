@@ -19,11 +19,11 @@ const wellnessSchema = new mongoose.Schema({
         required: true
     },
     activityType: {
-        type: String, // e.g., 'walking', 'running', 'stationary'
+        type: String, 
         default: 'unknown'
     },
     focusScore: {
-        type: Number, // Calculated metric 0-100
+        type: Number, 
         default: 0
     },
     mood: {
@@ -32,7 +32,7 @@ const wellnessSchema = new mongoose.Schema({
         default: 'neutral'
     },
     alertGenerated: {
-        type: String, // e.g., "Low sleep detected"
+        type: String, 
         default: null
     }
 });

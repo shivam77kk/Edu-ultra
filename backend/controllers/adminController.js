@@ -3,17 +3,17 @@ import Resource from '../models/Resource.js';
 import Quiz from '../models/Quiz.js';
 import Result from '../models/Result.js';
 
-// @desc    Get Admin Dashboard Stats
-// @route   GET /api/admin/stats
-// @access  Private/Admin
+
+
+
 export const getAdminStats = async (req, res) => {
     try {
         const totalUsers = await User.countDocuments();
         const totalResources = await Resource.countDocuments();
         const totalQuizzes = await Quiz.countDocuments();
 
-        // Simple aggregation for learning outcome analysis
-        // Average score of all results
+        
+        
         const results = await Result.find();
         let totalScoreAvg = 0;
         if (results.length > 0) {

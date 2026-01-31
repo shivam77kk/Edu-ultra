@@ -14,7 +14,7 @@ const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: 'edu-ultra-resources',
-        resource_type: 'auto', // Allow images, pdfs, videos
+        resource_type: 'auto', 
         allowed_formats: ['jpg', 'png', 'jpeg', 'pdf', 'mp4', 'mov'],
     },
 });

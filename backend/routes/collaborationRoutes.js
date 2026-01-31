@@ -11,13 +11,14 @@ router.post('/teams/:id/join', joinTeam);
 router.get('/teams', getTeams);
 router.get('/leaderboard', getLeaderboard);
 
-// Advanced features
-router.get('/teams/:id/invite', getInviteCode);
-router.post('/teams/join-invite', joinByInvite);
-router.post('/teams/:id/invite-email', inviteMember);
-router.get('/teams/:id/messages', getTeamMessages);
-router.post('/teams/:id/messages', sendMessage);
-router.post('/teams/:id/polls', createPoll);
-router.post('/teams/polls/vote', votePoll);
+
+
+
+
+
+
+
+
+
 
 export default router;

@@ -85,10 +85,10 @@ export default function ProfilePage() {
                 <p className="text-gray-400">Manage your account settings</p>
             </div>
 
-            {/* Profile Card */}
+            {}
             <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-8">
                 <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
-                    {/* Avatar */}
+                    {}
                     <div className="relative">
                         {user?.avatar ? (
                             <img
@@ -121,7 +121,7 @@ export default function ProfilePage() {
                         )}
                     </div>
 
-                    {/* Info */}
+                    {}
                     <div className="flex-1 text-center md:text-left">
                         {editing ? (
                             <form onSubmit={handleSubmit} className="space-y-4">
@@ -195,7 +195,7 @@ export default function ProfilePage() {
                 </div>
             </div>
 
-            {/* Stats */}
+            {}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

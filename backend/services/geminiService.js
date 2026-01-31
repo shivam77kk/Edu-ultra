@@ -2,7 +2,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import dotenv from 'dotenv';
 dotenv.config();
 
-// Validate API key on initialization
+
 if (!process.env.GOOGLE_API_KEY) {
     console.error('❌ GOOGLE_API_KEY is not set in environment variables');
     throw new Error('GOOGLE_API_KEY is required for AI service');
@@ -10,7 +10,7 @@ if (!process.env.GOOGLE_API_KEY) {
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
-// Fallback models to try in order
+
 const FALLBACK_MODELS = [
     "gemini-2.0-flash-exp",
     "gemini-2.5-flash",
@@ -18,18 +18,15 @@ const FALLBACK_MODELS = [
     "gemini-3-flash-preview"
 ];
 
-// Cache the working model
+
 let model = null;
 
-/**
- * Test and get a working Gemini model from the fallback list
- * @returns {Promise<Object>} Working Gemini model instance
- */
+
 async function getWorkingModel() {
     for (const modelName of FALLBACK_MODELS) {
         try {
             const testModel = genAI.getGenerativeModel({ model: modelName });
-            // Test the model with a simple prompt
+            
             await testModel.generateContent("test");
             console.log(`✅ Using model: ${modelName}`);
             return testModel;
@@ -41,10 +38,7 @@ async function getWorkingModel() {
     throw new Error('❌ All fallback models failed');
 }
 
-/**
- * Get or initialize the working model (with caching)
- * @returns {Promise<Object>} Working Gemini model instance
- */
+
 async function getModel() {
     if (!model) {
         model = await getWorkingModel();
@@ -52,12 +46,7 @@ async function getModel() {
     return model;
 }
 
-/**
- * Retry helper function with exponential backoff
- * @param {Function} fn - Async function to retry
- * @param {number} maxRetries - Maximum number of retries
- * @param {number} initialDelay - Initial delay in milliseconds
- */
+
 async function retryWithBackoff(fn, maxRetries = 3, initialDelay = 1000) {
     let lastError;
 
@@ -67,22 +56,22 @@ async function retryWithBackoff(fn, maxRetries = 3, initialDelay = 1000) {
         } catch (error) {
             lastError = error;
 
-            // Check if it's a quota/rate limit error
+            
             const isRateLimitError = error.message?.includes('quota') ||
                 error.message?.includes('rate limit') ||
                 error.message?.includes('429') ||
                 error.status === 429;
 
-            // If it's the last attempt or not a rate limit error, throw
+            
             if (attempt === maxRetries || !isRateLimitError) {
                 throw error;
             }
 
-            // Calculate delay with exponential backoff
+            
             const delay = initialDelay * Math.pow(2, attempt);
             console.log(`Rate limit hit, retrying in ${delay}ms... (Attempt ${attempt + 1}/${maxRetries})`);
 
-            // Wait before retrying
+            
             await new Promise(resolve => setTimeout(resolve, delay));
         }
     }
@@ -105,7 +94,7 @@ export const generateLearningPathArgs = async (topic, goals, level) => {
         const response = result.response;
         const text = response.text();
 
-        // Simple cleanup to ensure JSON is parseable if AI adds markdown code blocks
+        
         const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
         return JSON.parse(jsonStr);
     } catch (error) {
@@ -236,14 +225,7 @@ export const generateStudyPlanArgs = async (subjects, examDate, availableHoursPe
     }
 };
 
-/**
- * AI Debate Coach - Provides debate practice and feedback
- * @param {string} topic - The debate topic
- * @param {string} position - User's position (for/against)
- * @param {string} userArgument - User's argument (optional for initial topic analysis)
- * @param {string} mode - Mode: 'analyze', 'counterargument', 'feedback', 'practice'
- * @returns {Promise<Object|string>} Debate coaching response
- */
+
 export const debateCoachArgs = async (topic, position, userArgument = '', mode = 'practice') => {
     let prompt = '';
 
@@ -305,13 +287,13 @@ export const debateCoachArgs = async (topic, position, userArgument = '', mode =
         const response = result.response;
         const text = response.text();
 
-        // Try to parse as JSON if mode expects JSON response
+        
         if (['analyze', 'counterargument', 'feedback'].includes(mode)) {
             try {
                 const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
                 return JSON.parse(jsonStr);
             } catch (parseError) {
-                // If JSON parsing fails, return text response
+                
                 console.warn('Failed to parse JSON response, returning text');
                 return text;
             }

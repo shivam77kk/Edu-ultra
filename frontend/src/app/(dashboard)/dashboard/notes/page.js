@@ -78,7 +78,7 @@ export default function NotesPage() {
 
     return (
         <div className="space-y-6">
-            {/* Header */}
+            {}
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold text-white mb-2">Notes</h1>
@@ -96,7 +96,7 @@ export default function NotesPage() {
                 </button>
             </div>
 
-            {/* Notes Grid */}
+            {}
             {loading ? (
                 <div className="text-center py-12">
                     <Loader2 className="w-8 h-8 text-blue-500 animate-spin mx-auto" />
@@ -119,7 +119,7 @@ export default function NotesPage() {
                             <h3 className="text-xl font-bold text-white mb-3 truncate">{note.title}</h3>
                             <p className="text-gray-400 text-sm mb-4 line-clamp-3">{note.content}</p>
 
-                            {/* AI Summary Section */}
+                            {}
                             <AnimatePresence>
                                 {noteSummaries[note._id] && expandedSummaries[note._id] && (
                                     <motion.div
@@ -139,8 +139,8 @@ export default function NotesPage() {
                                                     onClick={() => {
                                                         const newContent = note.content + "\n\n**Summary:**\n" + noteSummaries[note._id];
                                                         setCurrentNote({ ...note, content: newContent });
-                                                        // trigger save immediately or via modal
-                                                        // For now, let's open modal with updated content so user can review/save
+                                                        
+                                                        
                                                         setShowModal(true);
                                                     }}
                                                     className="text-xs text-blue-400 hover:text-blue-300 underline"
@@ -205,7 +205,7 @@ export default function NotesPage() {
                 </div>
             )}
 
-            {/* Modal */}
+            {}
             {showModal && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                     <motion.div

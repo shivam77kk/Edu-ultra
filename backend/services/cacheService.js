@@ -1,20 +1,16 @@
 import NodeCache from 'node-cache';
 
-/**
- * Simple in-memory cache for AI responses
- * Reduces duplicate API calls for identical requests
- * TTL: 1 hour (3600 seconds)
- */
+
 class AIResponseCache {
     constructor() {
-        // Cache with 1 hour TTL and check period of 10 minutes
+        
         this.cache = new NodeCache({
-            stdTTL: 3600, // 1 hour
-            checkperiod: 600, // Check for expired keys every 10 minutes
-            useClones: false // Better performance
+            stdTTL: 3600, 
+            checkperiod: 600, 
+            useClones: false 
         });
 
-        // Track cache statistics
+        
         this.stats = {
             hits: 0,
             misses: 0,
@@ -22,18 +18,14 @@ class AIResponseCache {
         };
     }
 
-    /**
-     * Generate cache key from request parameters
-     */
+    
     generateKey(type, params) {
-        // Create a deterministic key from request type and parameters
+        
         const sortedParams = JSON.stringify(params, Object.keys(params).sort());
         return `${type}:${sortedParams}`;
     }
 
-    /**
-     * Get cached response
-     */
+    
     get(type, params) {
         const key = this.generateKey(type, params);
         const value = this.cache.get(key);
@@ -49,9 +41,7 @@ class AIResponseCache {
         return null;
     }
 
-    /**
-     * Set cached response
-     */
+    
     set(type, params, response) {
         const key = this.generateKey(type, params);
         const success = this.cache.set(key, response);
@@ -64,17 +54,13 @@ class AIResponseCache {
         return success;
     }
 
-    /**
-     * Clear all cache
-     */
+    
     clear() {
         this.cache.flushAll();
         console.log('🗑️  Cache cleared');
     }
 
-    /**
-     * Get cache statistics
-     */
+    
     getStats() {
         return {
             ...this.stats,
@@ -84,9 +70,7 @@ class AIResponseCache {
         };
     }
 
-    /**
-     * Calculate cache hit rate
-     */
+    
     getCacheHitRate() {
         const total = this.stats.hits + this.stats.misses;
         if (total === 0) return 0;
@@ -94,5 +78,5 @@ class AIResponseCache {
     }
 }
 
-// Export singleton instance
+
 export default new AIResponseCache();

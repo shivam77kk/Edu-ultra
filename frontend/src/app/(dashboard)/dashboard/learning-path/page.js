@@ -38,7 +38,7 @@ export default function LearningPathPage() {
 
     return (
         <div className="space-y-8 pb-8">
-            {/* Header */}
+            {}
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -55,7 +55,7 @@ export default function LearningPathPage() {
             </motion.div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Form Section */}
+                {}
                 <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -151,7 +151,7 @@ export default function LearningPathPage() {
                     </form>
                 </motion.div>
 
-                {/* Results Section */}
+                {}
                 <motion.div
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}

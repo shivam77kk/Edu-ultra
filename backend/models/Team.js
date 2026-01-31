@@ -21,7 +21,7 @@ const teamSchema = new mongoose.Schema({
     resources: [{
         title: String,
         url: String,
-        type: { type: String, default: 'link' }, // link, file
+        type: { type: String, default: 'link' }, 
         uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         createdAt: { type: Date, default: Date.now }
     }],

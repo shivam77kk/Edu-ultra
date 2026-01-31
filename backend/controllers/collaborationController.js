@@ -5,11 +5,11 @@ import Poll from '../models/Poll.js';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 
-// Helper for Email (Basic/Stub)
+
 const sendEmail = async (to, subject, text) => {
-    // In production, configure proper transporter
+    
     console.log(`[Email Simulation] To: ${to}, Subject: ${subject}, Body: ${text}`);
-    // If credentials exist, try sending
+    
     if (process.env.EMAIL_USER && process.env.EMAIL_PASSWORD && process.env.EMAIL_PASSWORD !== 'your_app_password') {
         try {
             const transporter = nodemailer.createTransport({
@@ -25,7 +25,7 @@ const sendEmail = async (to, subject, text) => {
     }
 };
 
-// ... existing createTeam ...
+
 export const createTeam = async (req, res) => {
     try {
         const team = await Team.create({
@@ -36,7 +36,7 @@ export const createTeam = async (req, res) => {
             skillsRequired: req.body.skillsRequired,
             projectIdea: req.body.projectIdea,
             privacy: req.body.isPrivate ? 'private' : 'public',
-            inviteCode: crypto.randomBytes(4).toString('hex') // Generate invite code
+            inviteCode: crypto.randomBytes(4).toString('hex') 
         });
         res.status(201).json({ success: true, data: team });
     } catch (err) {
@@ -44,12 +44,12 @@ export const createTeam = async (req, res) => {
     }
 };
 
-// @desc Generate/Get Invite Link/Code
+
 export const getInviteCode = async (req, res) => {
     try {
         const team = await Team.findById(req.params.id);
         if (!team) return res.status(404).json({ success: false, error: 'Team not found' });
-        // Only members/leader can see invite
+        
         if (!team.members.includes(req.user.id)) return res.status(403).json({ success: false, error: 'Not authorized' });
 
         if (!team.inviteCode) {
@@ -62,7 +62,7 @@ export const getInviteCode = async (req, res) => {
     }
 };
 
-// @desc Join by Invite Code
+
 export const joinByInvite = async (req, res) => {
     const { inviteCode } = req.body;
     try {
@@ -79,7 +79,7 @@ export const joinByInvite = async (req, res) => {
     }
 };
 
-// @desc Invite Member via Email
+
 export const inviteMember = async (req, res) => {
     const { email } = req.body;
     try {
@@ -96,7 +96,7 @@ export const inviteMember = async (req, res) => {
     }
 };
 
-// ... existing joinTeam (public join) ...
+
 export const joinTeam = async (req, res) => {
     try {
         const team = await Team.findById(req.params.id);
@@ -112,10 +112,10 @@ export const joinTeam = async (req, res) => {
     }
 };
 
-// ... existing getTeams (filter private) ...
+
 export const getTeams = async (req, res) => {
     try {
-        // Only show public teams OR teams user is member of
+        
         const teams = await Team.find({
             $or: [
                 { privacy: 'public' },
@@ -128,13 +128,13 @@ export const getTeams = async (req, res) => {
     }
 };
 
-// Messages & Chat
+
 export const getTeamMessages = async (req, res) => {
     try {
         const messages = await Message.find({ team: req.params.id })
             .populate('sender', 'name avatar')
             .populate('poll')
-            .sort({ createdAt: 1 }); // Oldest first for chat history
+            .sort({ createdAt: 1 }); 
         res.status(200).json({ success: true, data: messages });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
@@ -154,7 +154,7 @@ export const sendMessage = async (req, res) => {
             fileName
         });
 
-        // Populate sender for immediate frontend display
+        
         await message.populate('sender', 'name avatar');
         if (pollId) await message.populate('poll');
 
@@ -164,9 +164,9 @@ export const sendMessage = async (req, res) => {
     }
 };
 
-// Polls
+
 export const createPoll = async (req, res) => {
-    const { question, options } = req.body; // options: ['A', 'B']
+    const { question, options } = req.body; 
     try {
         const poll = await Poll.create({
             question,
@@ -175,7 +175,7 @@ export const createPoll = async (req, res) => {
             options: options.map(opt => ({ text: opt, votes: [] }))
         });
 
-        // Add poll to team
+        
         await Team.findByIdAndUpdate(req.params.id, { $push: { polls: poll._id } });
 
         res.status(201).json({ success: true, data: poll });
@@ -190,12 +190,12 @@ export const votePoll = async (req, res) => {
         const poll = await Poll.findById(pollId);
         if (!poll) return res.status(404).json({ success: false, error: 'Poll not found' });
 
-        // Remove previous vote if any (single choice)
+        
         poll.options.forEach(opt => {
             opt.votes = opt.votes.filter(v => v.toString() !== req.user.id);
         });
 
-        // Add new vote
+        
         const option = poll.options.id(optionId);
         if (option) {
             option.votes.push(req.user.id);
@@ -209,7 +209,7 @@ export const votePoll = async (req, res) => {
     }
 };
 
-// ... existing getLeaderboard ...
+
 export const getLeaderboard = async (req, res) => {
     try {
         const users = await User.find().select('name avatar role').limit(10);

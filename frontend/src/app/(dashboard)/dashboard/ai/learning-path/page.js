@@ -44,7 +44,7 @@ export default function LearningPathPage() {
 
     return (
         <div className="space-y-6 pb-8">
-            {/* Header */}
+            {}
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -53,7 +53,7 @@ export default function LearningPathPage() {
                 <p className="text-gray-400">Create a personalized learning roadmap for any topic</p>
             </motion.div>
 
-            {/* Form */}
+            {}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -114,7 +114,7 @@ export default function LearningPathPage() {
                     </button>
                 </form>
 
-                {/* Error Message */}
+                {}
                 <AnimatePresence>
                     {error && (
                         <motion.div
@@ -129,7 +129,7 @@ export default function LearningPathPage() {
                 </AnimatePresence>
             </motion.div>
 
-            {/* Learning Path Result */}
+            {}
             <AnimatePresence>
                 {learningPath && (
                     <motion.div
@@ -138,7 +138,7 @@ export default function LearningPathPage() {
                         exit={{ opacity: 0, y: -20 }}
                         className="space-y-4"
                     >
-                        {/* Header with Action Button */}
+                        {}
                         <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
                             <div className="flex items-center justify-between mb-6">
                                 <div className="flex items-center space-x-3">
@@ -161,7 +161,7 @@ export default function LearningPathPage() {
                             </div>
                         </div>
 
-                        {/* Modules */}
+                        {}
                         {learningPath.modules && learningPath.modules.length > 0 ? (
                             <div className="space-y-4">
                                 {learningPath.modules.map((module, index) => (

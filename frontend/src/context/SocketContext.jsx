@@ -21,7 +21,7 @@ export const SocketProvider = ({ children }) => {
 
     useEffect(() => {
         if (!user) {
-            // Disconnect socket if user logs out
+            
             if (socket) {
                 socket.disconnect();
                 setSocket(null);
@@ -30,7 +30,7 @@ export const SocketProvider = ({ children }) => {
             return;
         }
 
-        // Initialize socket connection
+        
         const socketUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
         const newSocket = io(socketUrl, {
             auth: {

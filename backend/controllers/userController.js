@@ -1,8 +1,8 @@
 import User from '../models/User.js';
 
-// @desc    Get user profile
-// @route   GET /api/users/profile
-// @access  Private
+
+
+
 export const getUserProfile = async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
@@ -12,9 +12,9 @@ export const getUserProfile = async (req, res) => {
     }
 };
 
-// @desc    Update user profile
-// @route   PUT /api/users/profile
-// @access  Private
+
+
+
 export const updateUserProfile = async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
@@ -30,8 +30,8 @@ export const updateUserProfile = async (req, res) => {
                 user.password = req.body.password;
             }
 
-            // Cloudinary image upload will be handled separately/middleware, 
-            // but if a URL is passed directly:
+            
+            
             if (req.body.avatar) {
                 user.avatar = req.body.avatar;
             }
@@ -50,9 +50,9 @@ export const updateUserProfile = async (req, res) => {
     }
 };
 
-// @desc    Get all users (Admin only)
-// @route   GET /api/users
-// @access  Private/Admin
+
+
+
 export const getUsers = async (req, res) => {
     try {
         const users = await User.find({});
@@ -62,9 +62,9 @@ export const getUsers = async (req, res) => {
     }
 };
 
-// @desc    Upload profile image
-// @route   POST /api/users/profile/image
-// @access  Private
+
+
+
 export const uploadProfileImage = async (req, res) => {
     try {
         if (!req.file) {
@@ -77,7 +77,7 @@ export const uploadProfileImage = async (req, res) => {
             return res.status(404).json({ success: false, error: 'User not found' });
         }
 
-        // Update user avatar with cloudinary URL
+        
         user.avatar = req.file.path;
         user.avatarPublicId = req.file.filename;
 
@@ -94,9 +94,9 @@ export const uploadProfileImage = async (req, res) => {
     }
 };
 
-// @desc    Remove profile image
-// @route   DELETE /api/users/profile/image
-// @access  Private
+
+
+
 export const removeProfileImage = async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
@@ -105,7 +105,7 @@ export const removeProfileImage = async (req, res) => {
             return res.status(404).json({ success: false, error: 'User not found' });
         }
 
-        // Remove avatar
+        
         user.avatar = undefined;
         user.avatarPublicId = undefined;
 
